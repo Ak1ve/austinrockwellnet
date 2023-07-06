@@ -38,15 +38,15 @@ function WorkCard({src, children}: {src: string, children: any}) {
 
 export default function Index() {
     return (
-        <div className="grid grid-cols-12 gap-10 container p-10 text-2xl">
-            <Section className="col-span-4">
+        <div className="lg:grid lg:grid-cols-12 gap-10 container p-10 text-2xl">
+            <Section className="lg:col-span-4">
             <h2>About Me</h2>
             <div className="container p-3 mt-8">
                 <ImageCard src="/me.png" alt="A photo of me!" color="red" />
                 <h3 className="text-red-800/60 text-center mt-3">he/they</h3>
             </div>
             </Section>
-            <Section className="col-span-8" color="purple">
+            <Section className="lg:col-span-8" color="purple">
                 <h2 className="text-end">Experience</h2>
                 <ImageCard alt="Summit" src="/summit.png" color="purple" />
                 <ImageCard alt="Scene75" src="/scene75.png" color="purple" />

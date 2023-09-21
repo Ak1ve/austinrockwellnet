@@ -7,10 +7,7 @@ export default async function Index() {
         const root = path.resolve(__dirname, "..\\..\\..\\..");
         const python = root + "\\venv\\bin\\python.exe";
         const script = root + "\\generate.py";
-        console.log(root);
-        console.log(python);
-        console.log(script);
-        // execSync(`${python} ${script}`, {encoding: "utf-8"})
+        execSync(`${python} ${script}`, {encoding: "utf-8"})
         return Math.random();
     }
     return <>{await doThing()}</>

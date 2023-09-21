@@ -8,7 +8,7 @@ export default async function Index() {
     const [s, setS] = useState("");
     useEffect(() => {
         fetch("/api/python").then(x => {
-            setS(x.body)
+            x.text().then(x => setS(x));
         })
     });
     return <>{s}</>

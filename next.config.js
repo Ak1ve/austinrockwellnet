@@ -14,7 +14,9 @@ const nextConfig = {
             let {name, ...rest} = x;
             return rest;
         })
-    }
+    },
+    experimental:
+    {serverActions: true}
 }
 
 

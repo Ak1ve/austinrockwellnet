@@ -7,9 +7,9 @@ export default async function Index() {
     "use client";
     const [s, setS] = useState("");
     useEffect(() => {
-        fetch("/api/python").then(x => {
+        fetch("api/python").then(x => {
             x.text().then(x => setS(x));
-        })
+        });
     });
     return <>{s}</>
 }

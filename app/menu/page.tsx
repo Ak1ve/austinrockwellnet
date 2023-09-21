@@ -1,8 +1,7 @@
 "use client";
-import { execSync } from "child_process";
 import { useState, useEffect } from "react";
 
-export default async function Index() {
+export default function Index() {
     "use client";
     const [s, setS] = useState("" as any);
     useEffect(() => {

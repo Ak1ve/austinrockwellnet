@@ -1,2 +1,2 @@
-with open("public/text.txt", "w") as f:
+with open("public/text.txt", "a") as f:
     f.write("WRITTEN")

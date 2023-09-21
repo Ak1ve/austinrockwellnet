@@ -7,8 +7,10 @@ export default async function Index() {
     const [s, setS] = useState("" as any);
     useEffect(() => {
         fetch("https://www.austinrockwell.net/api/python").then(x => {
-            console.log(x);
-            x.text().then(x => {setS(x); console.log(x)});
+            x.json().then(x => {
+                setS(JSON.stringify(x));
+            })
+            
         });
     }, []);
     return <>MENU: {s}</>

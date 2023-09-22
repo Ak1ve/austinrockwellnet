@@ -95,7 +95,7 @@ def menus(w: int) -> dict[str, dict]:
                 "lord_saunders": lord_saunders[day.lower()]["dinner"],
                 "heritage": heritage[day.lower()]["dinner"]
             }
-        } for day in ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        } for day in ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     }
 
 

@@ -2809,12 +2809,10 @@ packages:
     
   /tw-elements-react/1.0.0-alpha1: 
     resolution: {integrity: "sha512-SkiNnPqjdsBNwu6hGbgDvwp0F2jiyCxnJkaq1vy+RmAx1zny3yVlspMPcDmrJSOYxlXsbpJJOKrLxq0Wxr3FXg=="}
-      # "version": "1.0.0-alpha1",
-      # "resolved": "https://registry.npmjs.org/tw-elements-react/-/tw-elements-react-1.0.0-alpha1.tgz",
-      # "integrity": "sha512-SkiNnPqjdsBNwu6hGbgDvwp0F2jiyCxnJkaq1vy+RmAx1zny3yVlspMPcDmrJSOYxlXsbpJJOKrLxq0Wxr3FXg==",
       dependencies:
         react: 18.2.0
         react-dom: 18.2.0
         react-router-dom: 6.11.1
         ts-node: 10.9.1
+      dev: false
       

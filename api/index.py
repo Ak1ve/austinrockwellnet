@@ -80,13 +80,23 @@ RESPONSE: dict = None
 
 
 def menus(w: int) -> dict[str, dict]:
-    clarity = get_menu(f"https://www.aviserves.com/Oberlin/menus/wk{w}/clarity_menu_wk{w}.pdf")
-    lord_saunders = get_menu(f"https://www.aviserves.com/Oberlin/menus/wk{w}/lord-saunders_menu_wk{w}.pdf")
-    heritage = get_menu(f"https://www.aviserves.com/Oberlin/menus/wk{w}/Heritage_menu_wk{w}.pdf")
+    clarity = get_menu(f"https://www.aviserves.com/Oberlin/menus/wk{w}/clarity_menu_wk{w}.pdf").to_json()
+    lord_saunders = get_menu(f"https://www.aviserves.com/Oberlin/menus/wk{w}/lord-saunders_menu_wk{w}.pdf").to_json()
+    heritage = get_menu(f"https://www.aviserves.com/Oberlin/menus/wk{w}/Heritage_menu_wk{w}.pdf").to_json()
+    
     return {
-        "clarity": clarity.to_json(),
-        "heritage": heritage.to_json(),
-        "lord-saunders": lord_saunders.to_json()
+        day: {
+            "lunch": {
+                "clarity": clarity[day.lower()]["lunch"],
+                "lord_saunders": lord_saunders[day.lower()]["lunch"],
+                "heritage": heritage[day.lower()]["lunch"]
+            },
+            "dinner": {
+                "clarity": clarity[day.lower()]["dinner"],
+                "lord_saunders": lord_saunders[day.lower()]["dinner"],
+                "heritage": heritage[day.lower()]["dinner"]
+            }
+        } for day in ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     }
 
 
@@ -95,14 +105,17 @@ def fetch_menus() -> dict:
     global LAST_UPDATED
     now = datetime.datetime.now()
     days_since = (now - LAST_UPDATED).days
-    # refresh for monday
-    # monday
-    LAST_UPDATED = now
-    if not ((now.weekday() == 0 and days_since > 1) or days_since > 6 or RESPONSE is None):
+    # refreshes every day just in case
+    if days_since <= 1 and RESPONSE is not None:
         print("CACHE HIT")
         return RESPONSE
+    
+    LAST_UPDATED = now
     m = menus(now.isocalendar()[1])
-    RESPONSE = m
+    RESPONSE = {
+        "for_week": now.isocalendar()[1],
+        "menu": m,
+    }
     return RESPONSE
 
 

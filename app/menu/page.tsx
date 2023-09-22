@@ -1,7 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
-import { TECollapse } from "tw-elements-react";
 
+// https://www.npmjs.com/package/react-accessible-accordion
+
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemHeading,
+    AccordionItemButton,
+    AccordionItemPanel,
+} from 'react-accessible-accordion';
+import 'react-accessible-accordion/dist/fancy-example.css';
 
 type Dining = {
     clarity: string,
@@ -50,54 +59,16 @@ function DayCollapse({ hook, day, dayString }: { hook: any, day: Day, dayString:
     const show = {...hook[0]};
     show[dayString] = !show[dayString];   
     return (
-        <div className="rounded-t-lg border border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800">
-            <h2 className="mb-0" id="headingOne">
-                <button
-                    className={`${show.collapse1 &&
-                        `text-primary [box-shadow:inset_0_-1px_0_rgba(229,231,235)] dark:!text-primary-400 dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]`
-                        } group relative flex w-full items-center rounded-t-[15px] border-0 bg-white px-5 py-4 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white`}
-                    type="button"
-                    onClick={() =>
-                        hook[1](show)
-                    }
-                    aria-expanded="true"
-                    aria-controls="collapseOne"
-                >
-                    {dayString}
-                    <span
-                        className={`${show.collapse1
-                            ? `rotate-[-180deg] -mr-1`
-                            : `rotate-0 fill-[#212529]  dark:fill-white`
-                            } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="h-6 w-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                            />
-                        </svg>
-                    </span>
-                </button>
-            </h2>
-            <TECollapse
-                show={show.collapse1}
-                className="!mt-0 !rounded-b-none !shadow-none"
-            >
-                <Day day={day} />
-            </TECollapse>
-        </div>
+        <>
+           <AccordionItemHeading onClick={() => hook[1](show)}>
+            <AccordionItemButton>{dayString}</AccordionItemButton>
+            </AccordionItemHeading>
+            <AccordionItemPanel><Day day={day}/></AccordionItemPanel>
+        </>
     );
 }
 
-function AccordionAlwaysOpen({ menu }: { menu: Menu }) {
+function AccordionAlwaysOpen({ menu, currentDay }: { menu: Menu, currentDay: string }) {
     const showHook = useState({
         Monday: true,
         Tuesday: true,
@@ -109,18 +80,78 @@ function AccordionAlwaysOpen({ menu }: { menu: Menu }) {
     });
 
     return (
-        <>
-            <DayCollapse hook={showHook} day={menu.monday} dayString="Monday" />
-            <DayCollapse hook={showHook} day={menu.tuesday} dayString="Tuesday" />
-            <DayCollapse hook={showHook} day={menu.wednesday} dayString="Wednesday" />
-            <DayCollapse hook={showHook} day={menu.thursday} dayString="Thursday" />
-            <DayCollapse hook={showHook} day={menu.friday} dayString="Friday" />
-            <DayCollapse hook={showHook} day={menu.saturday} dayString="Satuday " />
-            <DayCollapse hook={showHook} day={menu.sunday} dayString="Sunday" />
-        </>
+        <Accordion allowMultipleExpanded allowZeroExpanded preExpanded={[currentDay]}>
+            <AccordionItem uuid={"Monday"}><DayCollapse hook={showHook} day={menu.monday} dayString="Monday" /></AccordionItem>
+            <AccordionItem uuid={"Tuesday"}><DayCollapse hook={showHook} day={menu.tuesday} dayString="Tuesday" /></AccordionItem>
+            <AccordionItem uuid={"Wednesday"}><DayCollapse hook={showHook} day={menu.wednesday} dayString="Wednesday" /></AccordionItem>
+            <AccordionItem uuid={"Thursday"}><DayCollapse hook={showHook} day={menu.thursday} dayString="Thursday" /></AccordionItem>
+            <AccordionItem uuid={"Friday"}><DayCollapse hook={showHook} day={menu.friday} dayString="Friday" /></AccordionItem>
+            <AccordionItem uuid={"Saturday"}><DayCollapse hook={showHook} day={menu.saturday} dayString="Saturday" /></AccordionItem>
+            <AccordionItem uuid={"Sunday"}><DayCollapse hook={showHook} day={menu.sunday} dayString="Sunday" /></AccordionItem>
+        </Accordion>
     );
 }
-
+const theme = {
+    accordion: {
+      defaultProps: {
+        icon: undefined,
+        className: "",
+        animate: {
+          unmount: {},
+          mount: {},
+        },
+        disabled: false,
+      },
+      styles: {
+        base: {
+          container: {
+            display: "block",
+            position: "relative",
+            width: "w-full",
+          },
+          header: {
+            initial: {
+              display: "flex",
+              justifyContent: "justify-between",
+              alignItems: "items-center",
+              width: "w-full",
+              py: "py-4",
+              borderWidth: "border-b border-b-blue-gray-100",
+              color: "text-blue-gray-700",
+              fontSmoothing: "antialiased",
+              fontFamily: "font-sans",
+              fontSize: "text-xl",
+              textAlign: "text-left",
+              fontWeight: "font-semibold",
+              lineHeight: "leading-snug",
+              userSelect: "select-none",
+              hover: "hover:text-blue-gray-900",
+              transition: "transition-colors",
+            },
+            active: { color: "text-blue-gray-900" },
+            icon: {
+              ml: "ml-4",
+            },
+          },
+          body: {
+            display: "block",
+            width: "w-full",
+            py: "py-4",
+            color: "text-gray-700",
+            fontSmoothing: "antialiased",
+            fontFamily: "font-sans",
+            fontSize: "text-sm",
+            fontWeight: "font-light",
+            lineHeight: "leading-normal",
+          },
+          disabled: {
+            pointerEvents: "pointer-events-none",
+            opacity: "opacity-50",
+          },
+        },
+      },
+    },
+  };
 export default function Index() {
     "use client";
     const [menu, setMenu] = useState({
@@ -144,5 +175,5 @@ export default function Index() {
     //     });
     // }, [s]);
 
-    return <AccordionAlwaysOpen menu={menu}/>
+    return <AccordionAlwaysOpen menu={menu} currentDay="Sunday"/>
 }

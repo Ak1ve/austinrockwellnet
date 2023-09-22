@@ -1,5 +1,3 @@
-import './globals.css';
-
 export const metadata = {
   title: 'Austin Rockwell',
   description: 'Austin Rockwell',

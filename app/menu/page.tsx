@@ -91,67 +91,6 @@ function AccordionAlwaysOpen({ menu, currentDay }: { menu: Menu, currentDay: str
     </Accordion>
   );
 }
-const theme = {
-  accordion: {
-    defaultProps: {
-      icon: undefined,
-      className: "",
-      animate: {
-        unmount: {},
-        mount: {},
-      },
-      disabled: false,
-    },
-    styles: {
-      base: {
-        container: {
-          display: "block",
-          position: "relative",
-          width: "w-full",
-        },
-        header: {
-          initial: {
-            display: "flex",
-            justifyContent: "justify-between",
-            alignItems: "items-center",
-            width: "w-full",
-            py: "py-4",
-            borderWidth: "border-b border-b-blue-gray-100",
-            color: "text-blue-gray-700",
-            fontSmoothing: "antialiased",
-            fontFamily: "font-sans",
-            fontSize: "text-xl",
-            textAlign: "text-left",
-            fontWeight: "font-semibold",
-            lineHeight: "leading-snug",
-            userSelect: "select-none",
-            hover: "hover:text-blue-gray-900",
-            transition: "transition-colors",
-          },
-          active: { color: "text-blue-gray-900" },
-          icon: {
-            ml: "ml-4",
-          },
-        },
-        body: {
-          display: "block",
-          width: "w-full",
-          py: "py-4",
-          color: "text-gray-700",
-          fontSmoothing: "antialiased",
-          fontFamily: "font-sans",
-          fontSize: "text-sm",
-          fontWeight: "font-light",
-          lineHeight: "leading-normal",
-        },
-        disabled: {
-          pointerEvents: "pointer-events-none",
-          opacity: "opacity-50",
-        },
-      },
-    },
-  },
-};
 
 /*
 sunday: { lunch: { clarity: "Clarity Lunch is really cool", lord_saunders: "Bruh lord saunders literally doesnt have lunch", heritage: "meh" }, dinner: { clarity: "YOOOO DINNNER", lord_saunders: "SO FUIRE BRUH", heritage: "HERIATE" } },
@@ -174,5 +113,6 @@ export default function Index() {
   if (menu === null) {
     return <>"loading..."</>;
   }
+  console.log(menu);
   return <><AccordionAlwaysOpen menu={menu.menu} currentDay="Sunday" />For Week: {menu.for_week}</>
 }

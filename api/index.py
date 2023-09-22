@@ -106,6 +106,6 @@ def fetch_menus() -> dict:
     return RESPONSE
 
 
-@app.route("/api/menu")
+@app.route("/api/menus")
 def hello_world():
     return jsonify(fetch_menus())

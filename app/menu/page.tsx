@@ -42,7 +42,7 @@ function Day({ day }: { day: Day }) {
 
   return (
     <div className="p-5 dark:bg-gray-900 text-gray-500">
-      <div className="grid grid-cols-2 mx-auto w-72 gap-5">
+      <div className="grid grid-cols-2 mx-auto gap-5">
         <div className="col-span-2 text-black dark:text-gray-400 mx-auto">Lunch</div>
         <div>Clarity:</div><div className="text-gray-700">{day.lunch.clarity}</div>
         <div>Heritage:</div><div className="text-gray-700">{day.lunch.heritage}</div>
@@ -111,8 +111,8 @@ export default function Index() {
 
   }, []);
   if (menu === null) {
-    return <>"loading..."</>;
+    return <>Loading Menus...</>;
   }
-  console.log(menu);
-  return <><AccordionAlwaysOpen menu={menu.menu} currentDay="Sunday" />For Week: {menu.for_week}</>
+  const week = ["Sunday", "Monday", "Tuesday", "Wednesday","Thursday", "Friday","Saturday"][(new Date()).getDay()];
+  return <><AccordionAlwaysOpen menu={menu.menu} currentDay={week} />For Week: {menu.for_week}</>
 }

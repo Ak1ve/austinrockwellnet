@@ -166,7 +166,7 @@ export default function Index() {
   "use client";
   const [menu, setMenu] = useState(null as MenuRespone | null);
   useEffect(() => {
-      fetch("/api/menus").then(x => {
+      fetch("https://www.austinrockwell.net/api/menus").then(x => {
         x.json().then(x => setMenu(x));
       });
 

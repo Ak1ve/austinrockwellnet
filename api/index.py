@@ -8,7 +8,6 @@ import re
 import PyPDF2 as Pdf
 import requests
 
-path = r"C:\Users\legos\Desktop\clarity_menu_wk38.pdf"
 
 
 _days = re.compile("(monday)|(tuesday)|(wednesday)|(thursday)|(friday)|(saturday)|(sunday)", flags=re.IGNORECASE)

@@ -41,13 +41,13 @@ type MenuRespone = {
 function Day({ day }: { day: Day }) {
 
   return (
-    <div className="p-5 dark:bg-gray-900 text-gray-500">
+    <div className="p-5  text-gray-500">
       <div className="grid grid-cols-2 mx-auto gap-5">
-        <div className="col-span-2 text-black dark:text-gray-400 mx-auto">Lunch</div>
+        <div className="col-span-2 text-black  mx-auto">Lunch</div>
         <div>Clarity:</div><div className="text-gray-700">{day.lunch.clarity}</div>
         <div>Heritage:</div><div className="text-gray-700">{day.lunch.heritage}</div>
         <div>Lord Saunders:</div><div className="text-gray-700">{day.lunch.lord_saunders}</div>
-        <div className="col-span-2 text-black dark:text-gray-400 mx-auto">Dinner</div>
+        <div className="col-span-2 text-black mx-auto">Dinner</div>
         <div>Clarity:</div><div className="text-gray-700">{day.dinner.clarity}</div>
         <div>Heritage:</div><div className="text-gray-700">{day.dinner.heritage}</div>
         <div>Lord Saunders:</div><div className="text-gray-700">{day.dinner.lord_saunders}</div>

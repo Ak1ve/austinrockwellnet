@@ -7,11 +7,74 @@ import pprint
 import re
 import PyPDF2 as Pdf
 import requests
+from pydantic import BaseModel, TypeAdapter
 
 
 
 _days = re.compile("(monday)|(tuesday)|(wednesday)|(thursday)|(friday)|(saturday)|(sunday)", flags=re.IGNORECASE)
 _form = re.compile("(dinner)|(lunch)", flags=re.IGNORECASE)
+
+
+
+class Food(BaseModel):
+    # for stevie
+    name: str
+    date: str
+    stationName: str
+
+
+def get_stations(txt: str):
+    # for stevie
+    foods = TypeAdapter(list[Food]).validate_json(txt)
+    d = {}
+    for food in foods:
+        name = food.stationName
+        y = d.get(name, "")
+        d[name] = y + food.name + ", "
+    return d
+
+
+def get_day(day: str):
+    # for stevie
+    root_link = "https://dish.avifoodsystems.com/api/menu-items?date={}&locationId=111&mealId={}"
+    # "breakfast": {station: food}, "lunch", "dinner"
+    breakfast = get_stations(requests.get(root_link.format(day, "182"), verify=False).text)
+    lunch = get_stations(requests.get(root_link.format(day, "183"), verify=False).text)
+    dinner = get_stations(requests.get(root_link.format(day, "184"), verify=False).text)
+
+    return {
+        "breakfast": breakfast,
+        "lunch": lunch,
+        "dinner": dinner
+    }
+
+
+def get_week():
+    # for stevie
+    now = datetime.datetime.now()
+    day = now.isoweekday()  # monday == 1
+    # MONDAY == 1
+    days = {
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6,
+        "sunday": 7,
+    }
+    return {
+        k: (now + datetime.timedelta(days=-(day - v))).strftime("%m/%d/%Y") for k, v in days.items()
+    }
+
+
+def get_week_menu():
+    # for stevie
+    dates = get_week()
+    return {
+        day: get_day(date) for day, date in dates.items()
+    }
+
 
 
 @dataclasses.dataclass
@@ -103,9 +166,9 @@ def fetch_menus() -> dict:
     global RESPONSE
     global LAST_UPDATED
     now = datetime.datetime.now()
-    days_since = (now - LAST_UPDATED).days
+    hours_since = (now - LAST_UPDATED).seconds / 60 / 60
     # refreshes every day just in case
-    if days_since <= 1 and RESPONSE is not None:
+    if hours_since <= 12 and RESPONSE is not None:
         print("CACHE HIT")
         return RESPONSE
     
@@ -114,6 +177,7 @@ def fetch_menus() -> dict:
     RESPONSE = {
         "for_week": now.isocalendar()[1],
         "menu": m,
+        "stevie": get_week_menu()
     }
     return RESPONSE
 

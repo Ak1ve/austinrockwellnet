@@ -3,3 +3,4 @@ Flask==2.2.2
 PyPDF2==3.0.1
 requests==2.31.0
 pydantic==2.3.0
+requests-async==0.6.2

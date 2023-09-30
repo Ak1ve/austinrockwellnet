@@ -21,7 +21,7 @@ class Food(BaseModel):
     stationName: str
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass()
 class Station:
     name: str
     menu: str
@@ -37,7 +37,7 @@ class Station:
         return [cls(name, food) for name, food in d.items()]
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass()
 class DiningHalls:
     clarity: str = ""
     lord_saunders: str = ""
@@ -69,7 +69,7 @@ class DiningHalls:
         }
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass()
 class Response:
     for_week: int
     menu: Menu[Day[DiningHalls]]
@@ -107,7 +107,7 @@ class Day(Generic[T]):
         return resp
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass()
 class Menu(Generic[T]):
     days: dict[str, T] = dataclasses.field(default_factory=lambda: {
         "monday": Day(),

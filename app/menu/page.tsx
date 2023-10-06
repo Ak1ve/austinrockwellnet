@@ -287,13 +287,13 @@ type AccordionProps = LoadedAccordion | { loading: true };
 
 function AccordionAlwaysOpen(props: AccordionProps) {
   const showHook = useState({
-    Monday: true,
-    Tuesday: true,
-    Wednesday: true,
-    Thursday: true,
-    Friday: true,
-    Saturday: true,
-    Sunday: true,
+    Monday: props.loading ? true : props.currentDay === "Monday",
+    Tuesday: props.loading ? true : props.currentDay === "Tuesday",
+    Wednesday: props.loading ? true : props.currentDay === "Wednesday",
+    Thursday: props.loading ? true : props.currentDay === "Thursday",
+    Friday: props.loading ? true : props.currentDay === "Friday",
+    Saturday: props.loading ? true : props.currentDay === "Saturday",
+    Sunday: props.loading ? true : props.currentDay === "Sunday",
   });
 
   if (props.loading) {

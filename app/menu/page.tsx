@@ -264,8 +264,6 @@ function DayCollapse(props: CollapseAccordion) {
       <AccordionItemPanel><Day loading dayString={props.dayString}/></AccordionItemPanel>
     </>);
   }
-  const show = { ...props.hook[0] };
-  show[props.dayString] = !show[props.dayString];
   return (
     <>
       <AccordionItemHeading onClick={() => props.hook[1](show)}>
@@ -287,13 +285,13 @@ type AccordionProps = LoadedAccordion | { loading: true };
 
 function AccordionAlwaysOpen(props: AccordionProps) {
   const showHook = useState({
-    Monday: props.loading ? true : props.currentDay === "Monday",
-    Tuesday: props.loading ? true : props.currentDay === "Tuesday",
-    Wednesday: props.loading ? true : props.currentDay === "Wednesday",
-    Thursday: props.loading ? true : props.currentDay === "Thursday",
-    Friday: props.loading ? true : props.currentDay === "Friday",
-    Saturday: props.loading ? true : props.currentDay === "Saturday",
-    Sunday: props.loading ? true : props.currentDay === "Sunday",
+    Monday: props.loading === true ? true : props.currentDay === "Monday",
+    Tuesday: props.loading === true ? true : props.currentDay === "Tuesday",
+    Wednesday: props.loading === true ? true : props.currentDay === "Wednesday",
+    Thursday: props.loading === true ? true : props.currentDay === "Thursday",
+    Friday: props.loading === true ? true : props.currentDay === "Friday",
+    Saturday: props.loading === true ? true : props.currentDay === "Saturday",
+    Sunday: props.loading === true ? true : props.currentDay === "Sunday",
   });
 
   if (props.loading) {

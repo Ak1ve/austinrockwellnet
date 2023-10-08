@@ -10,6 +10,7 @@ import {
   AccordionItemHeading,
   AccordionItemButton,
   AccordionItemPanel,
+  AccordionItemState,
 } from 'react-accessible-accordion';
 import 'react-accessible-accordion/dist/fancy-example.css';
 
@@ -62,13 +63,13 @@ const stev = {
 }
 
 const lord = {
-    lunch: null,
-    dinner: { hours: "5:00 PM - 7:30 PM", start: 17, end: 19.5 }
+  lunch: null,
+  dinner: { hours: "5:00 PM - 7:30 PM", start: 17, end: 19.5 }
 }
 
 const clarity = {
-    lunch: { hours: "11:00 AM - 2:00 PM", start: 11, end: 14 },
-    dinner: { hours: "5:00 PM - 8:00 PM", start: 17, end: 20 }
+  lunch: { hours: "11:00 AM - 2:00 PM", start: 11, end: 14 },
+  dinner: { hours: "5:00 PM - 8:00 PM", start: 17, end: 20 }
 }
 
 const heritage = {
@@ -138,9 +139,9 @@ function StevieCollapse({ places, mode, day }: { places: SteviePlaces, mode: str
   const text = showChildren ? "Hide Menu" : "Show Menu";
   const menus = Object.entries(places).map(val => (<><div>{val[0]}</div><div className="text-gray-700">{val[1]}</div></>));
   return (<>
-    <div>Stevie:<br/>
-    <span className="italic text-xs">{getHours("stevie", mode, day)}</span>
-      </div><div><div onClick={() => setShowChildren(!showChildren)} className="text-blue-500 underline hover:text-blue-700 hover:cursor-pointer">{text}</div></div>
+    <div>Stevie:<br />
+      <span className="italic text-xs">{getHours("stevie", mode, day)}</span>
+    </div><div><div onClick={() => setShowChildren(!showChildren)} className="text-blue-500 underline hover:text-blue-700 hover:cursor-pointer">{text}</div></div>
     {showChildren ? menus : <></>}
   </>);
 }
@@ -168,7 +169,7 @@ function DayMenu(props: { name: string, menu: string, mode: string, loading?: fa
     return (
       <>
         <div>
-          {props.name}:<br/>
+          {props.name}:<br />
           <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span>
         </div><div className="text-gray-700 animate-pulse" role="status">
           <div className="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
@@ -179,8 +180,8 @@ function DayMenu(props: { name: string, menu: string, mode: string, loading?: fa
   }
   return (
     <>
-      <div>{props.name}:<br/>
-          <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div><div className="text-gray-700">{props.menu}</div>
+      <div>{props.name}:<br />
+        <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div><div className="text-gray-700">{props.menu}</div>
     </>
   );
 }
@@ -192,7 +193,7 @@ function Day(props: DayType) {
     currentTime[1](new Date());
     setTimeout(() => {
       setSwap(!swap);
-    },1000 * 2 * 60); // every two minutes
+    }, 1000 * 2 * 60); // every two minutes
   }, [swap]);
 
 
@@ -201,19 +202,19 @@ function Day(props: DayType) {
       <div className="p-5 text-gray-500">
         <div className="grid grid-cols-2 mx-auto gap-5">
           <div className="col-span-2 text-black mx-auto">Breakfast</div>
-          <DayMenu name="Stevie" loading mode="breakfast" day={props.dayString}/>
+          <DayMenu name="Stevie" loading mode="breakfast" day={props.dayString} />
 
           <div className="col-span-2 text-black  mx-auto">Lunch</div>
-          <DayMenu name="Clarity" loading mode="lunch" day={props.dayString}/>
-          <DayMenu name="Heritage" loading mode="lunch" day={props.dayString}/>
-          <DayMenu name="Lord Saunders" loading mode="lunch" day={props.dayString}/>
-          <DayMenu name="Stevie" loading mode="lunch" day={props.dayString}/>
+          <DayMenu name="Clarity" loading mode="lunch" day={props.dayString} />
+          <DayMenu name="Heritage" loading mode="lunch" day={props.dayString} />
+          <DayMenu name="Lord Saunders" loading mode="lunch" day={props.dayString} />
+          <DayMenu name="Stevie" loading mode="lunch" day={props.dayString} />
 
           <div className="col-span-2 text-black mx-auto">Dinner</div>
-          <DayMenu name="Clarity" loading mode="dinner" day={props.dayString}/>
-          <DayMenu name="Heritage" loading mode="dinner" day={props.dayString}/>
-          <DayMenu name="Lord Saunders" loading mode="dinner" day={props.dayString}/>
-          <DayMenu name="Stevie" loading mode="dinner" day={props.dayString}/>
+          <DayMenu name="Clarity" loading mode="dinner" day={props.dayString} />
+          <DayMenu name="Heritage" loading mode="dinner" day={props.dayString} />
+          <DayMenu name="Lord Saunders" loading mode="dinner" day={props.dayString} />
+          <DayMenu name="Stevie" loading mode="dinner" day={props.dayString} />
         </div>
       </div>
     );
@@ -222,19 +223,19 @@ function Day(props: DayType) {
     <div className="p-5 text-gray-500">
       <div className="grid grid-cols-2 mx-auto gap-5">
         <div className="col-span-2 text-black mx-auto">Breakfast</div>
-        <StevieCollapse places={props.stevieMenus.breakfast!} mode="breakfast" day={props.dayString}/>
+        <StevieCollapse places={props.stevieMenus.breakfast!} mode="breakfast" day={props.dayString} />
 
         <div className="col-span-2 text-black  mx-auto">Lunch</div>
-        <DayMenu name="Clarity" menu={props.day.lunch.clarity} mode="lunch" day={props.dayString}/>
-        <DayMenu name="Heritage" menu={props.day.lunch.heritage} mode="lunch" day={props.dayString}/>
-        <DayMenu name="Lord Saunders" menu={props.day.lunch.lord_saunders} mode="lunch" day={props.dayString}/>
-        <StevieCollapse places={props.stevieMenus.lunch} mode="lunch" day={props.dayString}/>
+        <DayMenu name="Clarity" menu={props.day.lunch.clarity} mode="lunch" day={props.dayString} />
+        <DayMenu name="Heritage" menu={props.day.lunch.heritage} mode="lunch" day={props.dayString} />
+        <DayMenu name="Lord Saunders" menu={props.day.lunch.lord_saunders} mode="lunch" day={props.dayString} />
+        <StevieCollapse places={props.stevieMenus.lunch} mode="lunch" day={props.dayString} />
 
         <div className="col-span-2 text-black mx-auto">Dinner</div>
-        <DayMenu name="Clarity" menu={props.day.dinner.clarity} mode="dinner" day={props.dayString}/>
-        <DayMenu name="Heritage" menu={props.day.dinner.heritage} mode="dinner" day={props.dayString}/>
-        <DayMenu name="Lord Saunders" menu={props.day.dinner.lord_saunders} mode="dinner" day={props.dayString}/>
-        <StevieCollapse places={props.stevieMenus.dinner} mode="dinner" day={props.dayString}/>
+        <DayMenu name="Clarity" menu={props.day.dinner.clarity} mode="dinner" day={props.dayString} />
+        <DayMenu name="Heritage" menu={props.day.dinner.heritage} mode="dinner" day={props.dayString} />
+        <DayMenu name="Lord Saunders" menu={props.day.dinner.lord_saunders} mode="dinner" day={props.dayString} />
+        <StevieCollapse places={props.stevieMenus.dinner} mode="dinner" day={props.dayString} />
       </div>
     </div>
   );
@@ -242,7 +243,6 @@ function Day(props: DayType) {
 
 
 interface LoadedCollapse {
-  hook: any
   day: Day
   dayString: string
   stevieMenus: Day<SteviePlaces>
@@ -261,12 +261,12 @@ function DayCollapse(props: CollapseAccordion) {
       <AccordionItemHeading>
         <AccordionItemButton>{props.dayString}</AccordionItemButton>
       </AccordionItemHeading>
-      <AccordionItemPanel><Day loading dayString={props.dayString}/></AccordionItemPanel>
+      <AccordionItemPanel><Day loading dayString={props.dayString} /></AccordionItemPanel>
     </>);
   }
   return (
     <>
-      <AccordionItemHeading onClick={() => props.hook[1](show)}>
+      <AccordionItemHeading>
         <AccordionItemButton>{props.dayString}</AccordionItemButton>
       </AccordionItemHeading>
       <AccordionItemPanel><Day dayString={props.dayString} day={props.day} stevieMenus={props.stevieMenus} /></AccordionItemPanel>
@@ -274,49 +274,32 @@ function DayCollapse(props: CollapseAccordion) {
   );
 }
 
-interface LoadedAccordion {
-  menu: Menu
+interface AccordionProps {
+  menu?: Menu
   currentDay: string
-  stevie: StevieMenu
-  loading?: false
+  stevie?: StevieMenu
+  loading: boolean
 }
 
-type AccordionProps = LoadedAccordion | { loading: true };
-
 function AccordionAlwaysOpen(props: AccordionProps) {
-  const showHook = useState({
-    Monday: props.loading === true ? true : props.currentDay === "Monday",
-    Tuesday: props.loading === true ? true : props.currentDay === "Tuesday",
-    Wednesday: props.loading === true ? true : props.currentDay === "Wednesday",
-    Thursday: props.loading === true ? true : props.currentDay === "Thursday",
-    Friday: props.loading === true ? true : props.currentDay === "Friday",
-    Saturday: props.loading === true ? true : props.currentDay === "Saturday",
-    Sunday: props.loading === true ? true : props.currentDay === "Sunday",
-  });
-
-  if (props.loading) {
-    return (
-      <Accordion allowMultipleExpanded allowZeroExpanded preExpanded={Object.keys(showHook[0])}>
-        {Object.keys(showHook[0]).map(x => (
-          <AccordionItem uuid={x} key={x}>
-            <DayCollapse loading dayString={x} />
-          </AccordionItem>
-        ))}
-      </Accordion>
-    )
-  }
-
+  const weeks = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   return (
     <Accordion allowMultipleExpanded allowZeroExpanded preExpanded={[props.currentDay]}>
-      {Object.keys(showHook[0]).map(x => (
+      {weeks.map(x => (
         <AccordionItem uuid={x} key={x}>
-          <DayCollapse hook={showHook} day={(props.menu as any)[x.toLowerCase()]}
-            stevieMenus={(props.stevie as any)[x.toLowerCase()]} dayString={x} />
+          <DayCollapse loading={props.loading} day={
+            props.menu ? (props.menu as any)[x.toLowerCase()] : null
+          }
+            stevieMenus={
+              props.stevie ? (props.stevie as any)[x.toLowerCase()] : null
+            } dayString={x} />
         </AccordionItem>
       ))}
     </Accordion>
   )
 }
+
+const weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export default function Index() {
   "use client";
@@ -329,11 +312,12 @@ export default function Index() {
       });
 
   }, []);
-  const week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][(new Date()).getDay()];
+  // useEffect(() => {
+  //   setTimeout(() => setMenu(dummy), 1000);
+  // }, []);
+  const week = weeks[(new Date()).getDay()];
   return (<>
-    {menu === null ? <AccordionAlwaysOpen loading /> :
-      <AccordionAlwaysOpen menu={menu.menu} currentDay={week} stevie={menu.stevie} />
-    }
+    <AccordionAlwaysOpen menu={menu?.menu} currentDay={week} stevie={menu?.stevie} loading={menu === null}/>
     For Week: {menu?.for_week || "unknown"}
     <div className="italic">*DISCLAIMER: Some menu options may not be accurate.  If any issue arises (either with using the site or incorrect menus), please contact arockwel@oberlin.edu </div>
   </>);

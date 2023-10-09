@@ -305,17 +305,17 @@ export default function Index() {
   "use client";
   const [menu, setMenu] = useState(null as MenuResponse | null);
   // const menu = dummy satisfies MenuResponse;
-
+  let week = weeks[(new Date()).getDay()];
   useEffect(() => {
       fetch("https://www.austinrockwell.net/api/menus").then(x => {
         x.json().then(x => setMenu(x));
+        week = weeks[(new Date()).getDay()];
       });
 
   }, []);
   // useEffect(() => {
   //   setTimeout(() => setMenu(dummy), 1000);
   // }, []);
-  const week = weeks[(new Date()).getDay()];
   return (<>
     <AccordionAlwaysOpen menu={menu?.menu} currentDay={week} stevie={menu?.stevie} loading={menu === null}/>
     For Week: {menu?.for_week || "unknown"}

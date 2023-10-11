@@ -304,18 +304,23 @@ const weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
 export default function Index() {
   "use client";
   const [menu, setMenu] = useState(null as MenuResponse | null);
+  const [currentDay, setCurrentDay] = useState(null as string | null);
   // const menu = dummy satisfies MenuResponse;
-  let week = weeks[(new Date()).getDay()];
   useEffect(() => {
       fetch("https://www.austinrockwell.net/api/menus").then(x => {
         x.json().then(x => setMenu(x));
-        week = weeks[(new Date()).getDay()];
       });
 
   }, []);
   // useEffect(() => {
   //   setTimeout(() => setMenu(dummy), 1000);
   // }, []);
+  useEffect(() => {
+    setCurrentDay(weeks[(new Date()).getDay()]);
+  });
+  if (currentDay === null) {
+    return <></>;
+  }
   return (<>
     <AccordionAlwaysOpen menu={menu?.menu} currentDay={week} stevie={menu?.stevie} loading={menu === null}/>
     For Week: {menu?.for_week || "unknown"}

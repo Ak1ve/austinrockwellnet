@@ -86,7 +86,7 @@ export default function component() {
     if (now === null) {
         return <></>;
     }
-    return (
+    return (<>
         <div className="mx-auto p-5 md:w-[50%]">
             <label className={labelClass}>Select meal plan</label>
             <select onChange={onSelect} value={plan} className={inputClass}>
@@ -126,5 +126,7 @@ export default function component() {
             </div>
             Per day since the beginning of the semester.
         </div >
+        <div className="text-sm italic">To view how many meal swipes you have left, go to your eAccounts app {">"} scroll down {">"} select the meal plan under "Board Plans" {">"} At the very top, select "this year".  This will show you how many meal swipes your plan currently has left </div>
+        </>
     );
 }

@@ -127,6 +127,7 @@ export default function component() {
             Per day since the beginning of the semester.
         </div >
         <div className="text-sm italic">To view how many meal swipes you have left, go to your eAccounts app {">"} scroll down {">"} select the meal plan under "Board Plans" {">"} At the very top, select "this year".  This will show you how many meal swipes your plan currently has left </div>
+        <div className="text-sm">If there is a problem with this site, email <a href="mailto:arockwel@oberlin.edu">arockwel@oberlin.edu</a></div>
         </>
     );
 }

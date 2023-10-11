@@ -322,7 +322,7 @@ export default function Index() {
     return <></>;
   }
   return (<>
-    <AccordionAlwaysOpen menu={menu?.menu} currentDay={week} stevie={menu?.stevie} loading={menu === null}/>
+    <AccordionAlwaysOpen menu={menu?.menu} currentDay={currentDay} stevie={menu?.stevie} loading={menu === null}/>
     For Week: {menu?.for_week || "unknown"}
     <div className="italic">*DISCLAIMER: Some menu options may not be accurate.  If any issue arises (either with using the site or incorrect menus), please contact arockwel@oberlin.edu </div>
   </>);

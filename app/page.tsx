@@ -1,84 +1,36 @@
-import './globals.css';
 import { EMAIl, INSTAGRAM, LINKEDIN, GITHUB, PHONE } from "@/components/assets";
 import Image from "next/image";
-
-
-/*
-
-body {
-  background-color: #100d0d;
-  color: #fd0d4d;
-  font-size: 500%;
-  overflow-y: hidden;
+import "./main.css"
+function IconLink({ icon, children, href }: any) {
+  return (
+    <a className="hover:text-white hover:scale-105 flex items-center mt-5 lg:mt-0" href={href} target="_blank">
+      <div className="mr-10">{icon}</div>
+      <div className="underline lg:hidden text-3xl">{children}</div>
+    </a>
+  )
 }
 
-a {
-  all:unset;
-  
-}
-a:hover {
-  cursor: pointer;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 100vh;
-  flex-wrap: wrap;
-  cursor: default;
-}
-
-.photo {
-  margin-left: -10%;
-  border-radius: 100%;
-  outline-style: solid;
-  outline-color: #fd0d4d;
-  outline-width: 3px;
-}
-
-.photo:hover {
-  outline-offset: 5px;
-  scale: 105%;
-}
-
-h3 {
-  margin-left: 5%;
-}
-
-.flex-break {
-  flex-basis: 100%;
-  height: 0%; 
-}
-
-.socials {
-  margin-top: -35%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5%;
-  width: 100%;
-}
-
-.socials * :hover {
-  color: white;
-}
-*/
+// red: #fd0d4d
 export default function Index() {
-    return (
-        <div className="center">
-            <a href="/me.png" target="_blank"><Image height={200} width={200} src="/me.png" alt="A photo of me" className="photo" /></a>
-            <h3>Austin Rockwell</h3>
-            <div className="flex-break" />
-            <div className="socials">
-                <a href="https://www.instagram.com/magic.marinara/" target="_blank">{INSTAGRAM}</a>
-                <a href="https://www.linkedin.com/in/austin-rockwell-0593b527b/" target="_blank">{LINKEDIN}</a>
-                <a href="mailto:rockwell.austin04@gmail.com" target="_blank">{EMAIl}</a>
-                <a href="https://github.com/Ak1ve" target="_blank">{GITHUB}</a>
-                <a href="tel:419-706-5906">{PHONE}</a>
-                <a href="/sobie" className="text-5xl hover:text-white font-serif">SOBIE</a>
-            </div>
+  return (
+    <div className="mx-auto text-[#fd0d4d] lg:translate-y-[50%]">
+      <div className="lg:flex justify-between w-fit mx-auto gap-10">
+        <a href="/me.png" target="_blank">
+          <Image height={200} width={200} src="/me.png" alt="A photo of me" className="mx-auto mt-10 lg:mt-0 rounded-3xl border-[#fd0d4d] border-2" />
+        </a>
+        <div className="text-7xl self-center">Austin Rockwell</div>
+      </div>
+      <div className="lg:flex lg:justify-between lg:w-[60%] mt-10 mx-auto w-fit text-center">
+        <IconLink href="https://www.instagram.com/magic.marinara/" icon={INSTAGRAM}>Instagram</IconLink>
+        <IconLink href="https://www.linkedin.com/in/austin-rockwell-0593b527b/" icon={LINKEDIN}>LinkedIn</IconLink>
+        <IconLink href="mailto:rockwell.austin04@gmail.com" icon={EMAIl}>Email Me</IconLink>
+        <IconLink href="https://github.com/Ak1ve" icon={GITHUB}>Github</IconLink>
+        <IconLink href="tel:419-706-5906" icon={PHONE}>Text Me</IconLink>
+        
+        <div className="hover:text-white hover:scale-105 text-5xl font-serif mt-5 lg:mt-0">
+          <a className="underline lg:no-underline" href="/sobie">SOBIE</a>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

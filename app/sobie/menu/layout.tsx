@@ -1,6 +1,6 @@
 export const metadata = {
     title: 'ObieEats',
-    description: 'Austin Rockwell',
+    description: 'See The Best Dining Options of The Day',
 }
 
 // dark red : #a6192e

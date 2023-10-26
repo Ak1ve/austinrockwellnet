@@ -1,6 +1,6 @@
 export const metadata = {
     title: 'Mark My Calendar',
-    description: 'Austin Rockwell',
+    description: 'The Calendar Planner For Oberlin',
 }
 
 // dark red : #a6192e
@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className="text-[#120c0c] ">
+            <body className="text-[#120c0c]">
                 {children}
             </body>
         </html>

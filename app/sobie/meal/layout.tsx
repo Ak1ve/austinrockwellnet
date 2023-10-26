@@ -1,6 +1,6 @@
 export const metadata = {
     title: 'FlexSwipe',
-    description: 'Austin Rockwell',
+    description: 'Calculate Your Oberlin Spending',
 }
 
 export default function RootLayout({

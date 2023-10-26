@@ -2,11 +2,11 @@ import React from "react";
 
 
 function NavItem(props: { link: string, title: string, active: boolean }) {
-    const cls = props.active ? "text-[#FFC72C]" : "";
+    const cls = props.active ? "text-[#FFC72C]" : "text-white";
     return (
         <li className="nav-item">
             <a
-                className={cls + " px-3 py-2 flex items-center font-bold leading-snug text-white hover:underline hover:decoration-[#FFC72C] underline-offset-8 decoration-[2px]"}
+                className={cls + " px-3 py-2 flex items-center font-bold leading-snug hover:underline hover:decoration-[#FFC72C] underline-offset-8 decoration-[2px]"}
                 href={props.link}
             >
                 <span className="ml-2">{props.title}</span>

@@ -5,6 +5,18 @@ const redirects = [
       destination: "https://chrome.google.com/webstore/detail/progressbook-grade-tester/gbefacokacnljmbohkddpackecdcjflk",
       permanent: false
   },
+  {
+    name: "",
+    source: "/menu",
+    destination: "/sobie/menu",
+    permanent: false
+  },
+  {
+    name: "",
+    source: "/meal",
+    destination: "/sobie/meal",
+    permanent: false
+  },
 ]
 
 /** @type {import('next').NextConfig} */

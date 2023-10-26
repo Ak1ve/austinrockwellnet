@@ -1,5 +1,5 @@
 export const metadata = {
-    title: 'Meal Planning',
+    title: 'FlexSwipe',
     description: 'Austin Rockwell',
 }
 

@@ -77,6 +77,7 @@ export default function Index() {
                 <a href="mailto:rockwell.austin04@gmail.com" target="_blank">{EMAIl}</a>
                 <a href="https://github.com/Ak1ve" target="_blank">{GITHUB}</a>
                 <a href="tel:419-706-5906">{PHONE}</a>
+                <a href="/sobie" className="text-5xl hover:text-white font-serif">SOBIE</a>
             </div>
         </div>
     );

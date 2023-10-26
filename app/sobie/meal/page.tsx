@@ -1,4 +1,5 @@
 "use client";
+import NavbarDefault from "@/components/Navbar";
 import { useEffect, useState } from "react";
 
 
@@ -38,10 +39,10 @@ const mealPlans: MealPlan[] = [
 ]
 
 const semesters = [
-    {startDate: "2023-08-31", endDate: "2023-12-21"},
-    {startDate: "2024-02-05", endDate: "2024-05-19"},
-    {startDate: "2024-08-29", endDate: "2024-12-20"},
-    {startDate: "2025-02-03", endDate: "2025-05-18"}
+    { startDate: "2023-08-31", endDate: "2023-12-21" },
+    { startDate: "2024-02-05", endDate: "2024-05-19" },
+    { startDate: "2024-08-29", endDate: "2024-12-20" },
+    { startDate: "2025-02-03", endDate: "2025-05-18" }
 ]
 
 const labelClass = "block mb-2 text-sm font-medium text-gray-900";
@@ -73,7 +74,7 @@ export default function component() {
         const now = new Date();
         setNow(now);
         setInterval(() => setNow(new Date()), 1000 * 60 * 60);  // every hour
-        semesters.forEach(({startDate, endDate}) => {
+        semesters.forEach(({ startDate, endDate }) => {
             const start = new Date(startDate);
             const end = new Date(endDate);
             if (now >= start && now <= end) {
@@ -87,6 +88,11 @@ export default function component() {
         return <></>;
     }
     return (<>
+        <NavbarDefault active="FlexSwipe" />
+        <p className="ml-4 border-l-4 border-[#FFC72C] pl-2 mb-2">
+            Please be patient as this tool is currently in the process of updating
+            to a new design.
+        </p>
         <div className="mx-auto p-5 md:w-[50%]">
             <label className={labelClass}>Select meal plan</label>
             <select onChange={onSelect} value={plan} className={inputClass}>
@@ -95,9 +101,9 @@ export default function component() {
                 ))}
             </select>
             <label className={labelClass + " mt-5"}>Start of Semester</label>
-            <input className={inputClass} type="date" value={startDate} onChange={x => setStartDate(x.target.value)}/>
+            <input className={inputClass} type="date" value={startDate} onChange={x => setStartDate(x.target.value)} />
             <label className={labelClass + " mt-5"}>End of Semester</label>
-            <input className={inputClass} type="date" value={endDate} onChange={x => setEndDate(x.target.value)}/>
+            <input className={inputClass} type="date" value={endDate} onChange={x => setEndDate(x.target.value)} />
             <div className="md:flex mt-5 justify-between">
                 <div>
                     <label className={labelClass}>Meal Swipes Left</label>
@@ -105,7 +111,7 @@ export default function component() {
                 </div>
                 <div>
                     <label className={labelClass + " md:mt-0 mt-5"}>Flex Dollars Left</label>
-                    <input className={inputClass} type="number" value={flexLeft} onChange={x =>setFlexLeft(parseInt(x.target.value))} />
+                    <input className={inputClass} type="number" value={flexLeft} onChange={x => setFlexLeft(parseInt(x.target.value))} />
                 </div>
             </div>
             <div className="mx-auto mt-10 text-center">Future Outlook</div>
@@ -116,7 +122,7 @@ export default function component() {
                 <div>{(flexLeft / daysUntil).toPrecision(3)} Flex Dollars</div>
             </div>
             Per day until the semester ends.
-            
+
             <div className="mt-10 mx-auto text-center">Past Outlook</div>
             <hr />
             You've used an average of:
@@ -128,6 +134,6 @@ export default function component() {
         </div >
         <div className="text-sm italic">To view how many meal swipes you have left, go to your eAccounts app {">"} scroll down {">"} select the meal plan under "Board Plans" {">"} At the very top, select "this year".  This will show you how many meal swipes your plan currently has left </div>
         <div className="text-sm">If there is a problem with this site, email <a href="mailto:arockwel@oberlin.edu">arockwel@oberlin.edu</a></div>
-        </>
+    </>
     );
 }

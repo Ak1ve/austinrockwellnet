@@ -13,28 +13,28 @@ function datediff(first: Date | null, second: Date | null) {
 
 type MealPlan = {
     name: string,
-    mealSwipes: number,
-    flexDollars: number,
+    mealSwipes: string,
+    flexDollars: string,
     maxDailySwipes: number
 }
 
 const mealPlans: MealPlan[] = [
     {
         name: "GoYeo Meal Plan",
-        mealSwipes: 420,
-        flexDollars: 200.0,
+        mealSwipes: "420",
+        flexDollars: "200.0",
         maxDailySwipes: 7
     },
     {
         name: "Gold Meal Plan",
-        mealSwipes: 315,
-        flexDollars: 600.0,
+        mealSwipes: "315",
+        flexDollars: "600.0",
         maxDailySwipes: 5
     },
     {
         name: "Cardinal Meal Plan",
-        mealSwipes: 100,
-        flexDollars: 100.0,
+        mealSwipes: "100",
+        flexDollars: "100.0",
         maxDailySwipes: 3
     }
 ]
@@ -86,10 +86,11 @@ export default function component() {
         })
     }, []);
 
-    let averageSwipes = Math.min(swipesLeft / daysUntil, currentPlan.maxDailySwipes).toPrecision(2);
-    let averageFlex = (flexLeft / daysUntil).toPrecision(2);
-    let usedSwipes = ((currentPlan.mealSwipes - swipesLeft) / daysSince).toPrecision(2);
-    let usdeFlex = ((currentPlan.flexDollars - flexLeft) / daysSince).toPrecision(2);
+    let averageSwipes = Math.min(parseInt(swipesLeft) / daysUntil, currentPlan.maxDailySwipes).toPrecision(2);
+    let averageFlex = (parseFloat(flexLeft) / daysUntil).toPrecision(2);
+    let usedSwipes = ((parseInt(currentPlan.mealSwipes) - parseInt(swipesLeft)) / daysSince).toPrecision(2);
+    let usdeFlex = ((parseFloat(currentPlan.flexDollars) - parseFloat(flexLeft)) / daysSince).toPrecision(2);
+
     averageSwipes = averageSwipes === "NaN" ? "0" : averageSwipes;
     averageFlex = averageFlex === "NaN" ? "0" : averageFlex;
     usedSwipes = usedSwipes === "NaN" ? "0" : usedSwipes;
@@ -120,11 +121,11 @@ export default function component() {
             <div className="grid grid-cols-2 gap-4 mt-5">
                 <div>
                     <label className={labelClass}>Meal Swipes Left</label>
-                    <input className={inputClass} type="number" value={swipesLeft} onChange={x => setSwipesLeft(parseInt(x.target.value))} />
+                    <input className={inputClass} type="number" value={swipesLeft} onChange={x => setSwipesLeft(x.target.value)} />
                 </div>
                 <div>
                     <label className={labelClass}>Flex Dollars Left</label>
-                    <input className={inputClass} type="number" pattern="^\d*(\.\d{0,2})?$" value={flexLeft} onChange={x => setFlexLeft(parseFloat(x.target.value))} />
+                    <input className={inputClass} type="number" pattern="^\d*(\.\d{0,2})?$" value={flexLeft} onChange={x => setFlexLeft(x.target.value)} />
                 </div>
             </div>
 

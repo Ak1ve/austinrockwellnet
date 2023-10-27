@@ -1,5 +1,6 @@
 "use client";
 import NavbarDefault from "@/components/Navbar";
+import { Footer, Highlight } from "@/components/text";
 import { useEffect, useState } from "react";
 
 
@@ -21,19 +22,19 @@ const mealPlans: MealPlan[] = [
     {
         name: "GoYeo Meal Plan",
         mealSwipes: 420,
-        flexDollars: 200,
+        flexDollars: 200.0,
         maxDailySwipes: 7
     },
     {
         name: "Gold Meal Plan",
         mealSwipes: 315,
-        flexDollars: 600,
+        flexDollars: 600.0,
         maxDailySwipes: 5
     },
     {
         name: "Cardinal Meal Plan",
         mealSwipes: 100,
-        flexDollars: 100,
+        flexDollars: 100.0,
         maxDailySwipes: 3
     }
 ]
@@ -45,7 +46,7 @@ const semesters = [
     { startDate: "2025-02-03", endDate: "2025-05-18" }
 ]
 
-const labelClass = "block mb-2 text-sm font-medium text-gray-900";
+const labelClass = "block mb-2 text-sm text-[#e81727] font-bold font-serif";
 const inputClass = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
 
 export default function component() {
@@ -69,7 +70,7 @@ export default function component() {
             setFlexLeft(mealPlans[val].flexDollars);
         }
     }
-
+    // <div className="font-bold font-serif"></div>
     useEffect(() => {
         const now = new Date();
         setNow(now);
@@ -83,16 +84,22 @@ export default function component() {
                 setEndDate(endDate);
             }
         })
-    }, [])
+    }, []);
+
+    let averageSwipes = Math.min(swipesLeft / daysUntil, currentPlan.maxDailySwipes).toPrecision(2);
+    let averageFlex = (flexLeft / daysUntil).toPrecision(2);
+    let usedSwipes = ((currentPlan.mealSwipes - swipesLeft) / daysSince).toPrecision(2);
+    let usdeFlex = ((currentPlan.flexDollars - flexLeft) / daysSince).toPrecision(2);
+    averageSwipes = averageSwipes === "NaN" ? "0" : averageSwipes;
+    averageFlex = averageFlex === "NaN" ? "0" : averageFlex;
+    usedSwipes = usedSwipes === "NaN" ? "0" : usedSwipes;
+    usdeFlex = usdeFlex === "NaN" ? "0" : usdeFlex;
+
     if (now === null) {
         return <></>;
     }
     return (<>
         <NavbarDefault active="FlexSwipe" />
-        <p className="ml-4 border-l-4 border-[#FFC72C] pl-2 mb-2">
-            Please be patient as this tool is currently in the process of updating
-            to a new design.
-        </p>
         <div className="mx-auto p-5 md:w-[50%]">
             <label className={labelClass}>Select meal plan</label>
             <select onChange={onSelect} value={plan} className={inputClass}>
@@ -100,40 +107,47 @@ export default function component() {
                     <option key={idx} value={idx}>{x.name}</option>
                 ))}
             </select>
-            <label className={labelClass + " mt-5"}>Start of Semester</label>
-            <input className={inputClass} type="date" value={startDate} onChange={x => setStartDate(x.target.value)} />
-            <label className={labelClass + " mt-5"}>End of Semester</label>
-            <input className={inputClass} type="date" value={endDate} onChange={x => setEndDate(x.target.value)} />
-            <div className="md:flex mt-5 justify-between">
+            <div className="grid grid-cols-2 gap-4 items-center">
+                <div>
+                    <label className={labelClass + " mt-5"}>Start of Semester</label>
+                    <input className={inputClass} type="date" value={startDate} onChange={x => setStartDate(x.target.value)} />
+                </div>
+                <div>
+                    <label className={labelClass + " mt-5"}>End of Semester</label>
+                    <input className={inputClass} type="date" value={endDate} onChange={x => setEndDate(x.target.value)} />
+                </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-5">
                 <div>
                     <label className={labelClass}>Meal Swipes Left</label>
                     <input className={inputClass} type="number" value={swipesLeft} onChange={x => setSwipesLeft(parseInt(x.target.value))} />
                 </div>
                 <div>
-                    <label className={labelClass + " md:mt-0 mt-5"}>Flex Dollars Left</label>
-                    <input className={inputClass} type="number" value={flexLeft} onChange={x => setFlexLeft(parseInt(x.target.value))} />
+                    <label className={labelClass}>Flex Dollars Left</label>
+                    <input className={inputClass} type="number" pattern="^\d*(\.\d{0,2})?$" value={flexLeft} onChange={x => setFlexLeft(parseFloat(x.target.value))} />
                 </div>
             </div>
-            <div className="mx-auto mt-10 text-center">Future Outlook</div>
-            <hr />
-            You can use:
-            <div className="flex justify-between">
-                <div>{Math.min(swipesLeft / daysUntil, currentPlan.maxDailySwipes).toPrecision(3)} Meal Swipes</div>
-                <div>{(flexLeft / daysUntil).toPrecision(3)} Flex Dollars</div>
-            </div>
-            Per day until the semester ends.
 
-            <div className="mt-10 mx-auto text-center">Past Outlook</div>
+            <div className="mx-auto mt-10 text-center text-[#e81727] font-bold">Future Outlook</div>
             <hr />
-            You've used an average of:
-            <div className="flex justify-between">
-                <div>{((currentPlan.mealSwipes - swipesLeft) / daysSince).toPrecision(3)} Meal Swipes</div>
-                <div>{((currentPlan.flexDollars - flexLeft) / daysSince).toPrecision(3)} Flex Dollars</div>
+            <div className="lg:grid lg:grid-cols-2 gap-5 mt-5">
+                <p className="border-l-4 border-[#FFC72C] pl-2 mb-2 mt-3 lg:mt-0">You can use {averageSwipes} meal swipes per day until the end of the semester.</p>
+                <p className="border-l-4 border-[#e81727] pl-2 mb-2 mt-3 lg:mt-0">You can use {averageFlex} flex dollars per day until the end of the semester.</p>
             </div>
-            Per day since the beginning of the semester.
+
+            <div className="mx-auto mt-10 text-center text-[#e81727] font-bold">Past Outlook</div>
+            <hr />
+            <div className="lg:grid lg:grid-cols-2 gap-5 mt-5">
+                <p className="border-l-4 border-[#e81727] pl-2 mb-2 mt-3 lg:mt-0">You've used {usedSwipes} meal swipes per day this semester.</p>
+                <p className="border-l-4 border-[#FFC72C] pl-2 mb-2 mt-3 lg:mt-0">You've used {usdeFlex} flex dollars per day this semester.</p>
+            </div>
+            <hr className="my-10"/>
+            <Footer>
+                To view how many meal swipes you have left, go to your eAccounts app {">"} scroll down {">"}
+                select the meal plan under <Highlight>Board Plans</Highlight> {">"} At
+                the very top, select <Highlight>this year</Highlight>.  This will show you how many meal swipes your plan currently has left.
+            </Footer>
         </div >
-        <div className="text-sm italic">To view how many meal swipes you have left, go to your eAccounts app {">"} scroll down {">"} select the meal plan under "Board Plans" {">"} At the very top, select "this year".  This will show you how many meal swipes your plan currently has left </div>
-        <div className="text-sm">If there is a problem with this site, email <a href="mailto:arockwel@oberlin.edu">arockwel@oberlin.edu</a></div>
     </>
     );
 }

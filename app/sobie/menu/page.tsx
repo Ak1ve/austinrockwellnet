@@ -1,6 +1,6 @@
 "use client";
 import NavbarDefault from "@/components/Navbar";
-import { ObieText } from "@/components/text";
+import { Footer, ObieText } from "@/components/text";
 import { useState, useEffect } from "react";
 import {
     Accordion,
@@ -321,12 +321,9 @@ function Index() {
     }
     return (<>
         <AccordionAlwaysOpen menu={menu?.menu} currentDay={currentDay} stevie={menu?.stevie} loading={menu === null} />
-        <p className="border-l-4 border-[#e81727] pl-2 mb-2 mt-10 text-base">
-        This menu is currently showing dining options for week #{menu?.for_week || "unknown"}.
-        <br />
-        If any menu options are inaccurate, or if there is any issues with this site in general, please report
-        it to <a href="mailto:arockwel@oberlin.edu" className="text-[#e81727] underline hover:brightness-50">arockwel@oberlin.edu</a>
-        </p>
+        <Footer>
+            This menu is currently showing dining options for week #{menu?.for_week || "unknown"}.
+        </Footer>
     </>);
 }
 

@@ -36,3 +36,20 @@ export function GoToLink({ href, className, children }: { href: string, classNam
         </a>
     )
 }
+
+export function Footer({children, className} : any) {
+    return (
+        <p className={"border-l-4 border-[#e81727] pl-2 mb-2 mt-10 text-base " + className}>
+            {children}
+            <br/><br />
+            If there is a problem with this site, email <a href="mailto:arockwel@oberlin.edu" className="text-[#e81727] underline hover:brightness-50">arockwel@oberlin.edu</a>
+        </p>
+    );
+}
+
+export function Highlight({children, variant}: {children: any, variant?: "yellow"|"red"}) {
+    const vari = variant === "red" || variant===undefined? "text-[#e81727]" : "text-[#FFC72C]";
+    return (
+        <span className={vari + " font-semibold"}>{children}</span>
+    );
+}

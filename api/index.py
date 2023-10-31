@@ -283,5 +283,3 @@ async def obie_eats():
 @app.route("/api/presence")
 async def connect_oberlin():
     return client.cache["connect_oberlin"]
-
-app.run()

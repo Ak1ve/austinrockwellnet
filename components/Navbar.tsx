@@ -1,4 +1,5 @@
 import React from "react";
+import ThemeSwitcher from "./switcher";
 
 
 function NavItem(props: { link: string, title: string, active: boolean }) {
@@ -63,6 +64,7 @@ export default function NavbarDefault({active}: {active?: string}) {
                     >
                         <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
                             {navElements.map(x => <NavItem link={x.link} title={x.title} key={x.link} active={x.title === active}/>)}
+                            <ThemeSwitcher />
                         </ul>
                     </div>
                 </div>

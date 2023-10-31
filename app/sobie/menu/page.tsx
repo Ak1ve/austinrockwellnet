@@ -135,11 +135,11 @@ const sab = (x: string) => x === "friday" || x === "saturday";
 function StevieCollapse({ places, mode, day }: { places: SteviePlaces, mode: string, day: string }) {
     const [showChildren, setShowChildren] = useState(false);
     const text = showChildren ? "Hide Menu" : "Show Menu";
-    const menus = Object.entries(places).map(val => (<><div>{val[0]}</div><div className="text-gray-700">{val[1]}</div></>));
+    const menus = Object.entries(places).map(val => (<><div>{val[0]}</div><div className="text-gray-700 dark:text-[#f9f9f9]">{val[1]}</div></>));
     return (<>
         <div>Stevie:<br />
             <span className="italic text-xs">{getHours("stevie", mode, day)}</span>
-        </div><div><div onClick={() => setShowChildren(!showChildren)} className="text-blue-500 underline hover:text-blue-700 hover:cursor-pointer">{text}</div></div>
+        </div><div><div onClick={() => setShowChildren(!showChildren)} className="text-[#e81727] underline hover:brightness-75 hover:cursor-pointer">{text}</div></div>
         {showChildren ? menus : <></>}
     </>);
 }
@@ -169,7 +169,7 @@ function DayMenu(props: { name: string, menu: string, mode: string, loading?: fa
                 <div>
                     {props.name}:<br />
                     <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span>
-                </div><div className="text-gray-700 animate-pulse" role="status">
+                </div><div className="text-gray-700 animate-pulse dark:text-[#f9f9f9]" role="status">
                     <div className="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
                     <div className="h-2 bg-gray-200 rounded-full max-w-[300px] mb-2.5"></div>
                 </div>
@@ -179,7 +179,7 @@ function DayMenu(props: { name: string, menu: string, mode: string, loading?: fa
     return (
         <>
             <div>{props.name}:<br />
-                <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div><div className="text-gray-700">{props.menu}</div>
+                <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div><div className="text-gray-700 dark:text-[#f9f9f9]">{props.menu}</div>
         </>
     );
 }
@@ -199,16 +199,16 @@ function Day(props: DayType) {
         return (
             <div className="p-5 text-gray-500">
                 <div className="grid grid-cols-2 mx-auto gap-5">
-                    <div className="col-span-2 text-black mx-auto">Breakfast</div>
+                    <div className="col-span-2 text-black dark:text-white mx-auto">Breakfast</div>
                     <DayMenu name="Stevie" loading mode="breakfast" day={props.dayString} />
 
-                    <div className="col-span-2 text-black  mx-auto">Lunch</div>
+                    <div className="col-span-2 text-black dark:text-white  mx-auto">Lunch</div>
                     <DayMenu name="Clarity" loading mode="lunch" day={props.dayString} />
                     <DayMenu name="Heritage" loading mode="lunch" day={props.dayString} />
                     <DayMenu name="Lord Saunders" loading mode="lunch" day={props.dayString} />
                     <DayMenu name="Stevie" loading mode="lunch" day={props.dayString} />
 
-                    <div className="col-span-2 text-black mx-auto">Dinner</div>
+                    <div className="col-span-2 text-black dark:text-white mx-auto">Dinner</div>
                     <DayMenu name="Clarity" loading mode="dinner" day={props.dayString} />
                     <DayMenu name="Heritage" loading mode="dinner" day={props.dayString} />
                     <DayMenu name="Lord Saunders" loading mode="dinner" day={props.dayString} />
@@ -220,16 +220,16 @@ function Day(props: DayType) {
     return (
         <div className="p-5 text-gray-500">
             <div className="grid grid-cols-2 mx-auto gap-5">
-                <div className="col-span-2 text-black mx-auto">Breakfast</div>
+                <div className="col-span-2 text-black dark:text-white mx-auto">Breakfast</div>
                 <StevieCollapse places={props.stevieMenus.breakfast!} mode="breakfast" day={props.dayString} />
 
-                <div className="col-span-2 text-black  mx-auto">Lunch</div>
+                <div className="col-span-2 text-black dark:text-white  mx-auto">Lunch</div>
                 <DayMenu name="Clarity" menu={props.day.lunch.clarity} mode="lunch" day={props.dayString} />
                 <DayMenu name="Heritage" menu={props.day.lunch.heritage} mode="lunch" day={props.dayString} />
                 <DayMenu name="Lord Saunders" menu={props.day.lunch.lord_saunders} mode="lunch" day={props.dayString} />
                 <StevieCollapse places={props.stevieMenus.lunch} mode="lunch" day={props.dayString} />
 
-                <div className="col-span-2 text-black mx-auto">Dinner</div>
+                <div className="col-span-2 text-black dark:text-white mx-auto">Dinner</div>
                 <DayMenu name="Clarity" menu={props.day.dinner.clarity} mode="dinner" day={props.dayString} />
                 <DayMenu name="Heritage" menu={props.day.dinner.heritage} mode="dinner" day={props.dayString} />
                 <DayMenu name="Lord Saunders" menu={props.day.dinner.lord_saunders} mode="dinner" day={props.dayString} />
@@ -256,7 +256,7 @@ type CollapseAccordion = LoadedCollapse | UnloadedCollapse
 function DayCollapse(props: CollapseAccordion) {
     const header = (
         <AccordionItemHeading className="accordion__heading!border-none">
-            <AccordionItemButton className="accordion__button !text-[#e81727] !bg-white font-serif uppercase !border-none">{props.dayString}
+            <AccordionItemButton className="accordion__button !text-[#e81727] !bg-white dark:!bg-[#102124] font-serif uppercase !border-none">{props.dayString}
             </AccordionItemButton>
         </AccordionItemHeading>
     );
@@ -300,6 +300,7 @@ function AccordionAlwaysOpen(props: AccordionProps) {
 }
 
 const weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 
 function Index() {
     "use client";

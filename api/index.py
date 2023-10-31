@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Any
 from flask import Flask, jsonify
 import dataclasses
 import datetime
@@ -8,6 +8,7 @@ import re
 import PyPDF2 as Pdf
 import asyncio
 import requests_async as req
+import threading
 from pydantic import BaseModel, TypeAdapter
 
 app = Flask(__name__)
@@ -142,7 +143,7 @@ class Menu(Generic[T]):
         return self
 
 
-class App:
+class ObieEatsApp:
     _ISO_WEEK = {
         "monday": 1,
         "tuesday": 2,
@@ -166,10 +167,8 @@ class App:
     _lord_saunders_root_link = "https://www.aviserves.com/Oberlin/menus/wk{0}/lord-saunders_menu_wk{0}.pdf"
     _heritage_root_link = "https://www.aviserves.com/Oberlin/menus/wk{0}/Heritage_menu_wk{0}.pdf"
 
-    def __init__(self, *, cache_for_hours: int):
-        self.cache_for_hours = cache_for_hours
-        self._last_updated = None
-        self._response: dict | None = None
+    def __init__(self):
+        ...
 
     async def get_stevie(self, day: str) -> Day[Station]:
         reqs = [req.get(self._stevie_root_link.format(day, day_num), verify=False) for day_num in ("182", "183", "184")]
@@ -225,19 +224,64 @@ class App:
             stevie=stevie
         )
 
-    async def fetch(self) -> dict:
-        now = datetime.datetime.now()
-        if self._response is None or (now - self._last_updated).seconds >= self.cache_for_hours * 60 * 60:
-            self._last_updated = now
-            self._response = jsonify((await self.get_response()).to_json())
-        else:
-            print("CACHE HIT")
-        return self._response
+    async def fetch(self) -> Response:
+        with app.app_context():
+            return jsonify((await self.get_response()).to_json())
 
 
-client = App(cache_for_hours=12)
+class ConnectOberlinApp:
+    def __init__(self):
+        ...
+
+    async def fetch(self):
+        with app.app_context():
+            return jsonify((await req.get("https://api.presence.io/oberlin/v1/events", verify=False)).json())
+
+
+class App:
+    def __init__(self, *, refresh_time_mins: int):
+        self.obie_eats = ObieEatsApp()
+        self.connect_oberlin = ConnectOberlinApp()
+        self.cache: dict[str, Any] = {"obie_eats": None, "connect_oberlin": None}
+        self._refresh_time_mins = refresh_time_mins
+        self.event_thread = None
+
+    async def queue_tasks(self):
+        await asyncio.sleep(3)
+        while True:
+            await asyncio.gather(self.queue_obie_eats(),
+                                 self.queue_connect_oberlin(),
+                                 asyncio.sleep(self._refresh_time_mins * 60))
+
+    async def queue_obie_eats(self):
+        self.cache["obie_eats"] = await self.obie_eats.fetch()
+
+    async def queue_connect_oberlin(self):
+        self.cache["connect_oberlin"] = await self.connect_oberlin.fetch()
+
+    def start(self):
+        loop = asyncio.new_event_loop()
+
+        def begin_tasks():
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(self.queue_tasks())
+
+        self.event_thread = threading.Thread(target=begin_tasks, daemon=True, name="Event Loop")
+        self.event_thread.start()
+
+
+client = App(refresh_time_mins=120)
+with app.app_context():
+    client.start()
 
 
 @app.route("/api/menus")
-async def testing():
-    return await client.fetch()
+async def obie_eats():
+    return client.cache["obie_eats"]
+
+
+@app.route("/api/presence")
+async def connect_oberlin():
+    return client.cache["connect_oberlin"]
+
+app.run()

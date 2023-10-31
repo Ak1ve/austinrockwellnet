@@ -47,7 +47,7 @@ const semesters = [
 ]
 
 const labelClass = "block mb-2 text-sm text-[#e81727] font-bold font-serif";
-const inputClass = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
+const inputClass = "bg-gray-50 border dark:bg-gray-800 dark:text-white border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
 
 export default function component() {
     const [plan, setPlan] = useState(0);
@@ -59,7 +59,6 @@ export default function component() {
     const daysUntil = datediff(now, new Date(endDate));
     const daysSince = datediff(new Date(startDate), now);
     const currentPlan = mealPlans[plan];
-
     const onSelect = (x: any) => {
         const val = parseInt(x.target.value);
         setPlan(val);
@@ -85,7 +84,6 @@ export default function component() {
             }
         })
     }, []);
-
     let averageSwipes = Math.min(parseInt(swipesLeft) / daysUntil, currentPlan.maxDailySwipes).toPrecision(2);
     let averageFlex = (parseFloat(flexLeft) / daysUntil).toPrecision(2);
     let usedSwipes = ((parseInt(currentPlan.mealSwipes) - parseInt(swipesLeft)) / daysSince).toPrecision(2);

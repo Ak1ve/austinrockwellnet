@@ -44,6 +44,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  schedule:
+    specifier: ^0.5.0
+    version: 0.5.0
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2
@@ -2659,6 +2662,12 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.2.1
       is-regex: 1.1.4
+    dev: false
+
+  /schedule@0.5.0:
+    resolution: {integrity: sha512-HUcJicG5Ou8xfR//c2rPT0lPIRR09vVvN81T9fqfVgBmhERUbDEQoYKjpBxbueJnCPpSu2ujXzOnRQt6x9o/jw==}
+    dependencies:
+      object-assign: 4.1.1
     dev: false
 
   /scheduler@0.23.0:

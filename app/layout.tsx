@@ -4,6 +4,7 @@ export const metadata = {
   description: 'Austin Rockwell',
 }
 
+
 export default function RootLayout({
   children,
 }: {
@@ -11,8 +12,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="">
-          {children}
+      <body className="text-[#120c0c] dark:text-[#f9f9f9] dark:bg-[#102124]">
+        {children}
       </body>
     </html>
   )

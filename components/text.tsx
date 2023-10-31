@@ -22,7 +22,7 @@ export function ObieText({ children, title, image, flipped }: { children: any, t
 export function CheckerImage({ src, width, height, side, className }: { src: string, width: string, height: string, side?: "left" | "right", className?: string }) {
     const cls = side === "left" ? "lg:-translate-x-20" : "lg:translate-x-20";
     return (
-        <img className={side + " mx-auto lg:translate-y-[50%] my-5 lg:my-0 " + className} loading="lazy" src={src} width={width} height={height} />
+        <img className={side + " dark:bg-white mx-auto lg:translate-y-[50%] my-5 lg:my-0 " + className} loading="lazy" src={src} width={width} height={height} />
     );
 }
 

@@ -321,10 +321,6 @@ function Index() {
         return <></>;
     }
     return (<>
-        <Footer>
-            ATTENTION: If the menu options are saying closed for fall break, this is an issue with AVI's website.  All dining halls are open and in typical dining hall hours.
-            <br/><br/><br/> 
-        </Footer>
         <AccordionAlwaysOpen menu={menu?.menu} currentDay={currentDay} stevie={menu?.stevie} loading={menu === null} />
         <Footer>
             This menu is currently showing dining options for week #{menu?.for_week || "unknown"}.

@@ -1,5 +1,7 @@
 from __future__ import annotations
-from typing import Generic, TypeVar
+
+import functools
+from typing import Generic, TypeVar, Any
 from flask import Flask, jsonify
 import dataclasses
 import datetime
@@ -142,7 +144,7 @@ class Menu(Generic[T]):
         return self
 
 
-class App:
+class ObieEatsApp:
     _ISO_WEEK = {
         "monday": 1,
         "tuesday": 2,
@@ -166,9 +168,8 @@ class App:
     _lord_saunders_root_link = "https://www.aviserves.com/Oberlin/menus/wk{0}/lord-saunders_menu_wk{0}.pdf"
     _heritage_root_link = "https://www.aviserves.com/Oberlin/menus/wk{0}/Heritage_menu_wk{0}.pdf"
 
-    def __init__(self, *, refresh_time_mins: int):
-        self._response: dict | None = None
-        self._refresh_time_mins = refresh_time_mins
+    def __init__(self):
+        ...
 
     async def get_stevie(self, day: str) -> Day[Station]:
         reqs = [req.get(self._stevie_root_link.format(day, day_num), verify=False) for day_num in ("182", "183", "184")]
@@ -224,14 +225,63 @@ class App:
             stevie=stevie
         )
 
-    async def fetch(self) -> dict:
-        self._response = jsonify((await self.get_response()).to_json())
-        return self._response
+    async def fetch(self) -> Response:
+        with app.app_context():
+            return jsonify((await self.get_response()).to_json())
+
+
+class ConnectOberlinApp:
+    def __init__(self):
+        ...
+
+    async def fetch(self):
+        with app.app_context():
+            return jsonify((await req.get("https://api.presence.io/oberlin/v1/events", verify=False)).json())
+
+
+def cache(f: T) -> T:
+    """
+    This is a function that caches for the App class.  Reads _refresh_time_mins
+    :param f:
+    :return:
+    """
+    @functools.wraps(f)
+    async def func(*args, **kwargs):
+        time_since = abs((datetime.datetime.now() - func.__time__).seconds) / 60
+        # refresh cache
+        if func.__cache__ is None or time_since >= getattr(args[0], "_refresh_time_mins"):
+            func.__cache__ = await f(*args, **kwargs)
+            func.__time__ = datetime.datetime.now()
+        return func.__cache__
+    func.__cache__ = None
+    func.__time__ = datetime.datetime.now()
+    return func
+
+
+class App:
+    def __init__(self, *, refresh_time_mins: float):
+        self.obie_eats = ObieEatsApp()
+        self.connect_oberlin = ConnectOberlinApp()
+
+        self._refresh_time_mins = refresh_time_mins
+
+    @cache
+    async def menus(self):
+        return await self.obie_eats.fetch()
+
+    @cache
+    async def presence(self):
+        return await self.connect_oberlin.fetch()
 
 
 client = App(refresh_time_mins=120)
 
 
 @app.route("/api/menus")
-async def testing():
-    return await client.fetch()
+async def obie_eats():
+    return await client.menus()
+
+
+@app.route("/api/presence")
+async def connect_oberlin():
+    return await client.presence()

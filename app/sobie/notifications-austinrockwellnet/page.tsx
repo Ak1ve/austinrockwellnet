@@ -75,7 +75,7 @@ export default function f() {
                 </div>
             </div>
             <label className={labelClass}>Password</label>
-            <input className={inputClass} type="password" value={body.raw_password} onChange={e => setBody({...body, raw_password: e.target.value})}></input>
+            <input className={inputClass} name="password" type="password" value={body.raw_password} onChange={e => setBody({...body, raw_password: e.target.value})}></input>
             <div className="lg:grid lg:grid-cols-2 gap-4 items-center mt-5">
                 <button onClick={clearAllNotifications} className="bg-red-400 block font-bold rounded text-white hover:brightness-75 w-full">Clear All Notifications</button>
                 <button onClick={setNotification} className="bg-green-400 mt-5 lg:mt-0 block font-bold rounded text-white hover:brightness-75 w-full">Submit</button>

@@ -27,7 +27,7 @@ function post(route: string, body: any) {
 
 export default function f() {
     const [notifications, setNotifications] = useState(null as any);
-    const [severity, setSeverity] = useState("info" as "i" | "e" | "s" | "w");
+    const [severity, setSeverity] = useState("i" as "i" | "e" | "s" | "w");
     const [body, setBody] = useState({
         raw_password: "",
         route: "",
@@ -71,11 +71,11 @@ export default function f() {
                 </div>
                 <div>
                     <label className={labelClass} >Message</label>
-                    <input className={inputClass} type="text" value={body.value} onChange={e => setBody({ ...body, value: e.target.value })} />
+                    <input className={inputClass} name="Message" type="text" value={body.value} onChange={e => setBody({ ...body, value: e.target.value })} />
                 </div>
             </div>
             <label className={labelClass}>Password</label>
-            <input className={inputClass} type="password"></input>
+            <input className={inputClass} type="password" value={body.raw_password} onChange={e => setBody({...body, raw_password: e.target.value})}></input>
             <div className="lg:grid lg:grid-cols-2 gap-4 items-center mt-5">
                 <button onClick={clearAllNotifications} className="bg-red-400 block font-bold rounded text-white hover:brightness-75 w-full">Clear All Notifications</button>
                 <button onClick={setNotification} className="bg-green-400 mt-5 lg:mt-0 block font-bold rounded text-white hover:brightness-75 w-full">Submit</button>

@@ -30,13 +30,17 @@ class Station:
 
     @classmethod
     def from_text(cls, text: str) -> list[Station]:
-        foods = TypeAdapter(list[Food]).validate_json(text)
-        d = {}
-        for food in foods:
-            name = food.stationName
-            y = d.get(name, "")
-            d[name] = y + food.name + ", "
-        return [cls(name, food) for name, food in d.items()]
+        try:
+            foods = TypeAdapter(list[Food]).validate_json(text)
+            d = {}
+            for food in foods:
+                name = food.stationName
+                y = d.get(name, "")
+                d[name] = y + food.name + ", "
+            return [cls(name, food) for name, food in d.items()]
+        except Exception as e:
+            print(e)
+            return [cls("Stations Currently Unavailable", "Currently Unavailable")]
 
 
 @dataclasses.dataclass()
@@ -127,23 +131,29 @@ class Menu(Generic[T]):
     @classmethod
     def from_pages(cls, name: str, pages: list[str], day_regex, form_regex) -> Menu[Day]:
         self = cls()
-        current_day = "monday"
-        for x in pages:
-            if day_regex.match(x):
-                current_day = x.lower()
-                continue
-            mode = "lunch" if "dinner" not in name.lower() else "dinner"
-            for entry in [y.strip() for y in form_regex.split(x) if y is not None]:
-                if (mode_entry := entry.lower()) in ["lunch", "dinner"]:
-                    mode = mode_entry
+        try:
+            current_day = "monday"
+            for x in pages:
+                if day_regex.match(x):
+                    current_day = x.lower()
                     continue
-                self.days[current_day].__dict__[mode] += entry + " "
-        for day, obj in self.days.items():
-            obj.lunch = re.sub(r"[ ]{2,}", " ", obj.lunch).strip()
-            obj.dinner = re.sub(r"[ ]{2,}", " ", obj.dinner).strip()
-        return self
-
-
+                mode = "lunch" if "dinner" not in name.lower() else "dinner"
+                for entry in [y.strip() for y in form_regex.split(x) if y is not None]:
+                    if (mode_entry := entry.lower()) in ["lunch", "dinner"]:
+                        mode = mode_entry
+                        continue
+                    self.days[current_day].__dict__[mode] += entry + " "
+            for day, obj in self.days.items():
+                obj.lunch = re.sub(r"[ ]{2,}", " ", obj.lunch).strip()
+                obj.dinner = re.sub(r"[ ]{2,}", " ", obj.dinner).strip()
+            return self
+        except Exception as e:
+            print(e)
+            for d in self.days:
+                self.days[d] = "unavailable"
+            return self
+            
+        
 class ObieEatsApp:
     _ISO_WEEK = {
         "monday": 1,
@@ -252,6 +262,9 @@ def cache(f: T) -> T:
         if func.__cache__ is None or time_since >= getattr(args[0], "_refresh_time_mins"):
             func.__cache__ = await f(*args, **kwargs)
             func.__time__ = datetime.datetime.now()
+            print("REFRESHING CACHE")
+        else:
+            print("CACHE HIT")
         return func.__cache__
     func.__cache__ = None
     func.__time__ = datetime.datetime.now()
@@ -274,7 +287,7 @@ class App:
         return await self.connect_oberlin.fetch()
 
 
-client = App(refresh_time_mins=120)
+client = App(refresh_time_mins=1)
 
 
 @app.route("/api/menus")

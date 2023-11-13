@@ -11,6 +11,7 @@ import PyPDF2 as Pdf
 import asyncio
 import requests_async as req
 from pydantic import BaseModel, TypeAdapter
+import hashlib
 
 app = Flask(__name__)
 T = TypeVar("T")

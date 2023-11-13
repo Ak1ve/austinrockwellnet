@@ -72,14 +72,14 @@ export default function NavbarDefault({ active }: { active?: string }) {
         if (path === null) {
             return;
         }
-        fetch("/api/notifications").then(x => setNotification((x.json() as any)[path] || null));
+        fetch("/api/notifications").then(x => x.json().then(y => setNotification(y[path] || null)));
         // setNotification({ "/sobie/notifications-austinrockwellnet": "s:<p>THIS MESSAGE IS SUPER IMPORTANT. PLEASE CLICK <a href='/sobie/menu'>this menu</a> to find out more</p>" }[path] || null);
     }
 
     useEffect(() => {
         notificationCenter();
         setInterval(notificationCenter, 60 * 1000 * 10);  // every 10 minutes
-    }, []);
+    }, [notification]);
 
     return (
         <>

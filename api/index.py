@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import functools
 from typing import Generic, TypeVar, Any
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import dataclasses
 import datetime
 import io
@@ -249,6 +249,29 @@ class ConnectOberlinApp:
             return jsonify((await req.get("https://api.presence.io/oberlin/v1/events", verify=False)).json())
 
 
+class NotificationsApp:
+    def __init__(self, sha256_hex: str):
+        # is the format of "/sobie/menu": "notification"
+        self.notifications: dict[str, str] = {}
+        self.sha256_hex = sha256_hex
+
+    async def fetch(self) -> Response:
+        with app.app_context():
+            return jsonify(self.notifications)
+
+    async def set(self, raw_password: str, route: str, value: str) -> bool:
+        """
+        Returns true if successful
+        :param raw_password:
+        :param route:
+        :param value:
+        :return:
+        """
+        if hashlib.sha256(raw_password.encode()).hexdigest() == self.sha256_hex:
+            self.notifications[route] = value
+            return True
+        return False
+
 def cache(f: T) -> T:
     """
     This is a function that caches for the App class.  Reads _refresh_time_mins
@@ -273,8 +296,11 @@ def cache(f: T) -> T:
 
 class App:
     def __init__(self, *, refresh_time_mins: float):
+        self.password_hash = "bdd6165de518570540f24282fabc3218d1ec438e97d3cdaa551dd53b6d7061d6"
+
         self.obie_eats = ObieEatsApp()
         self.connect_oberlin = ConnectOberlinApp()
+        self.notifications = NotificationsApp(sha256_hex=self.password_hash)
 
         self._refresh_time_mins = refresh_time_mins
 
@@ -298,3 +324,20 @@ async def obie_eats():
 @app.route("/api/presence")
 async def connect_oberlin():
     return await client.presence()
+
+
+@app.route("/api/notifications")
+async def notifications():
+    return await client.notifications.fetch()
+
+
+@app.route("/api/notifications", methods=["POST"])
+async def set_notifications():
+    """
+    Body must have a body of {raw_password: str, route: str, value: str}
+    :return:
+    """
+    body = request.get_json(force=True)
+    return jsonify({"result": await client.notifications.set(body["raw_password"],
+                                                             body["route"],
+                                                             body["value"])})

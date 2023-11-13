@@ -72,7 +72,7 @@ export default function NavbarDefault({ active }: { active?: string }) {
         if (path === null) {
             return;
         }
-        fetch("/api/notications").then(x => setNotification((x.json() as any)[path] || null));
+        fetch("/api/notifications").then(x => setNotification((x.json() as any)[path] || null));
         // setNotification({ "/sobie/notifications-austinrockwellnet": "s:<p>THIS MESSAGE IS SUPER IMPORTANT. PLEASE CLICK <a href='/sobie/menu'>this menu</a> to find out more</p>" }[path] || null);
     }
 

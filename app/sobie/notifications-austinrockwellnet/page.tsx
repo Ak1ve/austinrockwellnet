@@ -47,7 +47,7 @@ export default function f() {
     }
 
     const setNotification = () => {
-        post("/api/notifications", {...body, value: severity + "::" + body.value});
+        post("/api/notifications", {...body, value: severity + ":" + body.value});
     }
 
     return (<>

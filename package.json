@@ -11,11 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aldabil/react-scheduler": "^2.7.26",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
     "@material-tailwind/react": "^2.1.2",
-    "@mui/material": "^5.14.17",
     "@types/node": "20.1.4",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",

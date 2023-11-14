@@ -25,6 +25,7 @@ function Notification(props: { body: string }) {
     if (props.body === null || props.body === undefined || !show || props.body === "") {
         return <></>;
     }
+    const _ = "underline hover:underline";
     const mode = props.body.substring(0, 1);
     const colors = {
         i: "text-blue-800 border-blue-300 bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800",

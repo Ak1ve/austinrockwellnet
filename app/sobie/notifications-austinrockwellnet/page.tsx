@@ -30,7 +30,7 @@ export default function f() {
     const [severity, setSeverity] = useState("i" as "i" | "e" | "s" | "w");
     const [body, setBody] = useState({
         raw_password: "",
-        route: "",
+        route: options[0],
         value: "",
     });
     const onSelect = (x: any) => {

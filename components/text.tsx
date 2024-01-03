@@ -1,3 +1,31 @@
+import classNames from "classnames";
+type Variants = "red"|"yellow";
+
+type VariantType = {
+    variant?: Variants;
+}
+
+export const Colors = {
+    red: {
+        text: "text-[#e81727]",
+        border: "border-[#e81727]",
+        bg: "bg-[#e81727]",
+        "!bg": "!bg-[#e81727]"
+    },
+    yellow: {
+        text: "text-[#FFC72C]",
+        border: "border-[#FFC72C]",
+        bg: "bg-[#FFC72C]",
+    },
+}
+
+export type ColorType = typeof Colors;
+
+export function getAttrs<K extends keyof ColorType[Variants]>(attrs: K | K[], variant: Variants, ...clsNames: (string | undefined)[]): string {
+    const attributes = Array.isArray(attrs) ? attrs : [attrs];
+    return classNames(attributes.map(x => Colors[variant][x]), clsNames)
+}
+
 export function Title({ children }: { children: any }) {
     return (
         <div className="text-2xl text-center border-[#a6192e] border mx-auto lg:w-fit lg:px-96 px-0 w-full py-3 text-[#e81727] font-bold">{children}</div>
@@ -37,19 +65,36 @@ export function GoToLink({ href, className, children }: { href: string, classNam
     )
 }
 
-export function Footer({children, className} : any) {
+type TextBlockProps = React.HTMLProps<HTMLParagraphElement> & VariantType;
+export function TextBlock({variant, className, ...props}: TextBlockProps) {
+    const pClass = getAttrs("border", variant || "red", "border-l-4 pl-2 mb-2", className);
     return (
-        <p className={"border-l-4 border-[#e81727] pl-2 mb-2 mt-10 text-base " + className}>
-            {children}
-            <br/><br />
-            If there is a problem with this site, email <a href="mailto:arockwel@oberlin.edu" className="text-[#e81727] underline hover:brightness-50">arockwel@oberlin.edu</a>
-        </p>
+        <p className={pClass} {...props}/>
     );
 }
 
-export function Highlight({children, variant}: {children: any, variant?: "yellow"|"red"}) {
-    const vari = variant === "red" || variant===undefined? "text-[#e81727]" : "text-[#FFC72C]";
+export function Footer({className, children, ...props}: TextBlockProps) {
     return (
-        <span className={vari + " font-semibold"}>{children}</span>
+        <TextBlock className={classNames(className, "mt-10 text-base")} {...props}>
+            {children}
+            <br/><br />
+            If there is a problem with this site, email <a href="mailto:arockwel@oberlin.edu" className="text-[#e81727] underline hover:brightness-50">arockwel@oberlin.edu</a>
+        </TextBlock>
     );
+}
+
+type HighlightProps = React.HTMLProps<HTMLSpanElement> & VariantType
+export function Highlight({variant, className, ...props}: HighlightProps) {
+    const spanClass = getAttrs("text", variant || "red", "font-semibold", className);
+    return (
+        <span className={spanClass} {...props}/>
+    );
+}
+
+type SubtitleProps = React.HTMLProps<HTMLDivElement> & VariantType
+export function Subtitle({className, variant, ...props}: SubtitleProps) {
+    const divClass = getAttrs("text", variant || "red", "mx-auto text-center font-bold", className);
+    return (
+        <div className={divClass} {...props}/>
+    )
 }

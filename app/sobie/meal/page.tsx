@@ -1,7 +1,9 @@
 "use client";
 import NavbarDefault from "@/components/Navbar";
-import { Footer, Highlight } from "@/components/text";
+import { Input, InputGroup, OuterSelect } from "@/components/inputs";
+import { Footer, Highlight, Subtitle, TextBlock } from "@/components/text";
 import { useEffect, useState } from "react";
+import Select from "react-select";
 
 
 function datediff(first: Date | null, second: Date | null) {
@@ -9,13 +11,6 @@ function datediff(first: Date | null, second: Date | null) {
         return 1;
     }
     return Math.round(((second as any) - (first as any)) / (1000 * 60 * 60 * 24));
-}
-
-type MealPlan = {
-    name: string,
-    mealSwipes: string,
-    flexDollars: string,
-    maxDailySwipes: number
 }
 
 const mealPlans: MealPlan[] = [
@@ -46,8 +41,6 @@ const semesters = [
     { startDate: "2025-02-03", endDate: "2025-05-18" }
 ]
 
-const labelClass = "block mb-2 text-sm text-[#e81727] font-bold font-serif";
-const inputClass = "bg-gray-50 border dark:bg-gray-800 dark:text-white border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
 
 export default function component() {
     const [plan, setPlan] = useState(0);
@@ -56,11 +49,13 @@ export default function component() {
     const [startDate, setStartDate] = useState("2023-08-31");
     const [endDate, setEndDate] = useState("2023-12-21");
     const [now, setNow] = useState(null as null | Date);
+    const [mealPlan, setMealPlan] = useState([mealPlans[0]]);
+
     const daysUntil = datediff(now, new Date(endDate));
     const daysSince = datediff(new Date(startDate), now);
     const currentPlan = mealPlans[plan];
     const onSelect = (x: any) => {
-        const val = parseInt(x.target.value);
+        const val = parseInt(x.value);
         setPlan(val);
         if (mealPlans.map(x => x.mealSwipes).includes(swipesLeft)) {
             setSwipesLeft(mealPlans[val].mealSwipes); // if it is a default, just fill in
@@ -99,46 +94,32 @@ export default function component() {
     }
     return (<>
         <NavbarDefault active="FlexSwipe" />
-        <div className="mx-auto p-5 md:w-[50%]">
-            <label className={labelClass}>Select meal plan</label>
-            <select onChange={onSelect} value={plan} className={inputClass}>
-                {mealPlans.map((x, idx) => (
-                    <option key={idx} value={idx}>{x.name}</option>
-                ))}
-            </select>
-            <div className="grid grid-cols-2 gap-4 items-center">
-                <div>
-                    <label className={labelClass + " mt-5"}>Start of Semester</label>
-                    <input className={inputClass} type="date" value={startDate} onChange={x => setStartDate(x.target.value)} />
-                </div>
-                <div>
-                    <label className={labelClass + " mt-5"}>End of Semester</label>
-                    <input className={inputClass} type="date" value={endDate} onChange={x => setEndDate(x.target.value)} />
-                </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-5">
-                <div>
-                    <label className={labelClass}>Meal Swipes Left</label>
-                    <input className={inputClass} type="number" value={swipesLeft} onChange={x => setSwipesLeft(x.target.value)} />
-                </div>
-                <div>
-                    <label className={labelClass}>Flex Dollars Left</label>
-                    <input className={inputClass} type="number" pattern="^\d*(\.\d{0,2})?$" value={flexLeft} onChange={x => setFlexLeft(x.target.value)} />
-                </div>
-            </div>
+        <div className="mx-auto p-5 md:w-[50%]">            
+            <OuterSelect label="Select Meal Plan">
+                <Select onChange={onSelect} options={mealPlans.map((x, idx) => ({value: idx.toString(), label: x.name}))} defaultValue={{label: mealPlans[0].name, value: "0"}}/>
+            </OuterSelect>
 
-            <div className="mx-auto mt-10 text-center text-[#e81727] font-bold">Future Outlook</div>
+            <InputGroup className="mt-5">
+                <Input type="date" value={startDate} dispatch={setStartDate}>Start of Semester</Input>
+                <Input type="date" value={endDate} dispatch={setEndDate}>End of Semester</Input>
+            </InputGroup>
+            
+            <InputGroup className="mt-5">
+                <Input type="number" value={swipesLeft} dispatch={setSwipesLeft}>Meal Swipes Left</Input>
+                <Input type="number" pattern="^\d*(\.\d{0,2})?$" value={flexLeft} dispatch={setFlexLeft}>Flex Dollars Left</Input>
+            </InputGroup>
+
+            <Subtitle className="mt-10">Future Outlook</Subtitle>
             <hr />
             <div className="lg:grid lg:grid-cols-2 gap-5 mt-5">
-                <p className="border-l-4 border-[#FFC72C] pl-2 mb-2 mt-3 lg:mt-0">You can use {averageSwipes} meal swipes per day until the end of the semester.</p>
-                <p className="border-l-4 border-[#e81727] pl-2 mb-2 mt-3 lg:mt-0">You can use {averageFlex} flex dollars per day until the end of the semester.</p>
+                <TextBlock variant="yellow" className="mt-3 lg:mt-0">You can use {averageSwipes} meal swipes per day until the end of the semester.</TextBlock>
+                <TextBlock variant="red" className="mt-3 lg:mt-0">You can use {averageFlex} flex dollars per day until the end of the semester.</TextBlock>
             </div>
-
-            <div className="mx-auto mt-10 text-center text-[#e81727] font-bold">Past Outlook</div>
+            <Subtitle className="mt-10">Past Outlook</Subtitle>
             <hr />
             <div className="lg:grid lg:grid-cols-2 gap-5 mt-5">
-                <p className="border-l-4 border-[#e81727] pl-2 mb-2 mt-3 lg:mt-0">You've used {usedSwipes} meal swipes per day this semester.</p>
-                <p className="border-l-4 border-[#FFC72C] pl-2 mb-2 mt-3 lg:mt-0">You've used {usdeFlex} flex dollars per day this semester.</p>
+                <TextBlock variant="red" className="mt-3 lg:mt-0">You've used {usedSwipes} meal swipes per day this semester.</TextBlock>
+                <TextBlock variant="yellow" className="mt-3 lg:mt-0">You've used {usdeFlex} flex dollars per day this semester.</TextBlock>
             </div>
             <hr className="my-10"/>
             <Footer>

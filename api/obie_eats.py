@@ -10,7 +10,7 @@ import PyPDF2 as Pdf
 import asyncio
 import requests_async as req
 from pydantic import BaseModel, TypeAdapter
-from service import Service, route
+from .service import Service, route
 
 T = TypeVar("T")
 

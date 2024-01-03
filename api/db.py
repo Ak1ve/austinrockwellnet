@@ -1,6 +1,6 @@
 from flask import Response, jsonify
 from pydantic import BaseModel
-from service import Service, route
+from .service import Service, route
 from pathlib import Path
 
 DB_PATH = (Path(__file__) / ".." / "database.json").resolve()

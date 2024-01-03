@@ -1,4 +1,4 @@
-from service import Service, route
+from .service import Service, route
 from flask import jsonify
 import PyPDF2 as Pdf
 import requests_async as req

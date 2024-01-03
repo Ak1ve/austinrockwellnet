@@ -1,4 +1,4 @@
-type 
+// type 
 
 type MeetingTime = {
     days: string[], // TODO

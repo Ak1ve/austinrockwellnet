@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from service import Service, route
 from pathlib import Path
 
-DB_PATH = (Path(__file__) / ".." / "db.json").resolve()
+DB_PATH = (Path(__file__) / ".." / "database.json").resolve()
 
 class Database(BaseModel):
     notifications: dict[str, str]

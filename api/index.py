@@ -4,8 +4,8 @@ from flask import Flask, jsonify, request
 import sys
 from .obie_eats import ObieEatsService
 from .connect_oberlin import ConnectOberlinService
-from .db import DatabaseService
-from .notifications import NotificationService
+from .db_service import DatabaseService
+from .notifications_service import NotificationService
 app = Flask(__name__)
 
 print(sys.version_info)

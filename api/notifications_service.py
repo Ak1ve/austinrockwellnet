@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, Response
 from .service import Service, route
-from .db import DatabaseService
+from .db_service import DatabaseService
 import hashlib
 
 

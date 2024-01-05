@@ -50,7 +50,7 @@ class Service(ABC):
         self.app = app
         self._client = client
     
-    def get_service(self, name: str):
+    def get_service(self, name):
         return self._client.get_service(name)
 
 

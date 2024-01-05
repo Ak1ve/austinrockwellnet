@@ -6,6 +6,7 @@ from .obie_eats import ObieEatsService
 from .connect_oberlin import ConnectOberlinService
 from .db_service import DatabaseService
 from .notifications_service import NotificationService
+from .banner_service import BannerService
 app = Flask(__name__)
 
 print(sys.version_info)
@@ -17,10 +18,10 @@ class Client:
 
     def load_route(self, s: Service, name: str):
         fetch = getattr(s, name)
-        async def f():
+        async def f(*args, **kwargs):
             if fetch.__service_json_body__:
-                return await fetch(request.get_json(force=True))
-            return await fetch()
+                return await fetch(*args, **kwargs, body=request.get_json(force=True))
+            return await fetch(*args, **kwargs)
         f.__name__ = fetch.__service_route__.replace("/", "_") + "__".join(fetch.__service_methods__)
         app.add_url_rule(fetch.__service_route__, view_func=f, methods=fetch.__service_methods__)
 
@@ -41,6 +42,7 @@ client.load_service(ObieEatsService)
 client.load_service(ConnectOberlinService)
 client.load_service(DatabaseService)
 client.load_service(NotificationService)
+client.load_service(BannerService)
 
 # if __name__ == "__main__":
 #     app.run()

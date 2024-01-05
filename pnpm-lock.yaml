@@ -26,6 +26,9 @@ dependencies:
   classnames:
     specifier: ^2.3.2
     version: 2.3.2
+  compress-json:
+    specifier: ^3.0.0
+    version: 3.0.0
   concurrently:
     specifier: ^8.0.1
     version: 8.0.1
@@ -1035,6 +1038,10 @@ packages:
   /commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
+    dev: false
+
+  /compress-json@3.0.0:
+    resolution: {integrity: sha512-oebYSI+JLtVsZep+rAe1zbZ37vxmf93xnBj+JkHvQyFKvc4ZIAUtiZNX5yB/ERPWpTFEml3cGOKFM7cCpgmyAw==}
     dev: false
 
   /concat-map@0.0.1:

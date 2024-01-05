@@ -8,6 +8,7 @@ DB_PATH = (Path(__file__) / ".." / "database.json").resolve()
 class Database(BaseModel):
     notifications: dict[str, str]
     adminHash: str
+    currentTerm: str
 
     @classmethod
     def load(cls):

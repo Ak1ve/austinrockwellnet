@@ -1,7 +1,7 @@
 import classNames from "classnames";
 type Variants = "red"|"yellow";
 
-type VariantType = {
+export type VariantType = {
     variant?: Variants;
 }
 
@@ -16,6 +16,7 @@ export const Colors = {
         text: "text-[#FFC72C]",
         border: "border-[#FFC72C]",
         bg: "bg-[#FFC72C]",
+        "!bg": "!bg-[#FFC72C]"
     },
 }
 

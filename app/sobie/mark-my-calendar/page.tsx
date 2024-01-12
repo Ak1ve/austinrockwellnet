@@ -671,11 +671,6 @@ export default function f() {
         _setData(x);
     }
     const [calendarData, setCalendarData] = useState(null as AcademicCalendarResponse | null);
-    useEffect(() => {
-        const saved = localStorage.getItem("calendarData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!);
-        console.log(saved);
-        _setData(saved);
-    }, []);
     const prop = <K1 extends keyof CalendarData,
         K2 extends keyof CalendarData[K1], K3 extends keyof CalendarData[K1][K2]>(k1: K1, k2?: K2, k3?: K3) => {
         return (e: any) => {
@@ -695,7 +690,8 @@ export default function f() {
         // const promise = Promise.resolve(AcademicCalendarPracticeResponse);
         promise.then(cal => {
             setCalendarData(cal);
-            const val = {...data};
+            const saved = localStorage.getItem("calendarData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!);
+            const val = {...saved};
             val.academicCalendar.semesterStart = cal.semesterStart;
             val.academicCalendar.semesterEnd = cal.semesterEnd;
             val.academicCalendar.readingPeriod = {startDate: cal.readingPeriodStart, endDate: cal.readingPeriodEnd};

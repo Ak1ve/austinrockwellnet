@@ -11,7 +11,7 @@ const MARK_MY_CALENDAR = <b className="text-[#FFC72C] font-serif normal-case">Ma
 const OBERLIN_IMAGE = <CheckerImage width="300" height="372" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Oberlin_College_logo.svg/1200px-Oberlin_College_logo.svg.png" />;
 const MENU_IMAGE = <CheckerImage className="lg:!translate-y-0" side="left" width="150" height="" src="https://images.vexels.com/media/users/3/228656/isolated/preview/40160cf643e9bb8350e3e4e75beb3741-menu-vintage-label.png" />
 const FLEX_SWIPE_IMAGE = <CheckerImage width="150" height="" src="https://cdn-icons-png.flaticon.com/512/4470/4470502.png" />;
-const MARK_MY_CALENDAR_IMAGE = <CheckerImage side="left" width="200" height="" src="https://pngimg.com/d/under_construction_PNG18.png" />;
+const MARK_MY_CALENDAR_IMAGE = <CheckerImage side="left" className="lg:!translate-y-11" width="200" height="" src="https://cdn-icons-png.flaticon.com/512/5091/5091493.png" />;
 const ME_IMAGE = <CheckerImage className="lg:!translate-y-11" width="200" height="" src="/me.png" />
 const NOTE_BOOK_IMAGE = <CheckerImage className="lg:!translate-y-11" height="" side="left" width="200" src="https://cdn.vectorstock.com/i/preview-1x/59/72/book-notebook-cartoon-vector-46025972.jpg" />;
 
@@ -53,7 +53,6 @@ export default function f() {
                     With this tool, you will be able to easily enter your course syllabi, and
                     {"  "}{MARK_MY_CALENDAR} will add all of the information to your google calendar!  This includes
                     breaks, class times, office hours, tutoring, and assignments!
-                    {"  "}<i><b>This tool is currently under construction and is not ready.</b></i>
                 </p>
                 <GoToLink href="sobie/mark-my-calendar" className="text-[#FFC72C]">Take Me to Mark My Calendar</GoToLink>
             </ObieText>

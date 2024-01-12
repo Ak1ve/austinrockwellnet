@@ -136,7 +136,7 @@ function InnerWeekPicker({ onChange, value, ...props }: InnerWeekPickerProps) {
     return (
         <div {...props}>
             {["Su", "M", "T", "W", "Th", "F", "Sa"].map((x, idx) => (
-                <WeekPickerDay onClick={changeState} day={x} active={value[days[idx]]} />
+                <WeekPickerDay key={idx} onClick={changeState} day={x} active={value[days[idx]]} />
             ))}
         </div>
     )

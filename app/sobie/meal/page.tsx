@@ -48,8 +48,15 @@ export default function component() {
     const [flexLeft, setFlexLeft] = useState(mealPlans[plan].flexDollars)
     const [startDate, setStartDate] = useState("2023-08-31");
     const [endDate, setEndDate] = useState("2023-12-21");
+
+    useEffect(() => {
+        fetch("https://www.austinrockwell.net/api/db/calendar").then(x => x.json()).then(x => {
+            setStartDate(x.semesterStart);
+            setEndDate(x.semesterEnd);
+        })
+    }, []);
+
     const [now, setNow] = useState(null as null | Date);
-    const [mealPlan, setMealPlan] = useState([mealPlans[0]]);
 
     const daysUntil = datediff(now, new Date(endDate));
     const daysSince = datediff(new Date(startDate), now);

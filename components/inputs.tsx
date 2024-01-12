@@ -42,7 +42,7 @@ export function Checkbox({ labelClassName, value, labelProps, divClassName, divP
     const divCls = classNames("flex items-center", divClassName);
     return (
         <div className={divCls} onClick={() => dispatch(!value)} {...divProps}>
-            <input type="checkbox" checked={value} className={inputCls} {...props} />
+            <input onChange={() => {}} type="checkbox" checked={value} className={inputCls} {...props} />
             <label className={labelCls} {...labelProps}>{children}</label>
         </div>
     )

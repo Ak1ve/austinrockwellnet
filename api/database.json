@@ -3,5 +3,50 @@
         "/sobie/menu": "i:Attention Obies: Please sign <a class=\"underline\" href=\"https://docs.google.com/forms/d/e/1FAIpQLScOym8GqTZUpmav4K6RGr3khmwtml3EMsphmRNqJ395vNRwkA/viewform?pli=1\">this petition</a> in order to reinstate lunch at A-House!"
     },
     "adminHash": "a6207814eb079df660fc75f4cbda133bfefee1f744ba0e03709d5d420674f1fc",
-    "currentTerm": "202402"
+    "currentTerm": "202402",
+    "currentCalendar": {
+        "currentTerm": "202402",
+        "semesterStart": "2024-02-05",
+        "semesterEnd": "2024-05-10",
+        "readingPeriodStart": "2024-05-11",
+        "readingPeriodEnd": "2024-05-14",
+        "breaks": [
+            {
+                "breakName": "Spring Break",
+                "startDate": "2024-03-23",
+                "endDate": "2024-03-31"
+            }
+        ],
+        "finals": {
+            "MWF 8:00": "2024-05-13 14:00",
+            "MW 8:00": "2024-05-13 14:00",
+            "WF 8:00": "2024-05-13 14:00",
+            "MTWR 8:00": "2024-05-13 14:00",
+            "MTRF 8:00": "2024-05-13 14:00",
+            "MTWRF 8:00": "2024-05-13 14:00",
+            "MWF 8:35": "2024-05-13 14:00",
+            "MWF 9:00": "2024-05-13 14:00",
+            "MWF 10:00": "2024-05-13 14:00",
+            "MWF 11:00": "2024-05-13 14:00",
+            "MWF 13:00": "2024-05-13 14:00",
+            "MWF 13:30": "2024-05-13 14:00",
+            "MWF 14:30": "2024-05-13 14:00",
+            "MWF 15:00": "2024-05-13 14:00",
+            "MWF 15:30": "2024-05-13 14:00",
+            "TR 8:00": "2024-05-13 14:00",
+            "TR 8:35": "2024-05-13 14:00",
+            "TR 9:00": "2024-05-13 14:00",
+            "TR 9:30": "2024-05-13 14:00",
+            "TR 10:00": "2024-05-13 14:00",
+            "TR 11:00": "2024-05-13 14:00",
+            "TR 13:00": "2024-05-13 14:00",
+            "TR 13:30": "2024-05-13 14:00",
+            "TR 14:30": "2024-05-13 14:00",
+            "TR 15:00": "2024-05-13 14:00",
+            "TR 3:30": "2024-05-13 14:00",
+            "MTWRF 16:00": "2024-05-13 14:00",
+            "MTWRF 16:30": "2024-05-13 14:00",
+            "REST": "2024-05-13 14:00"
+        }
+    }
 }

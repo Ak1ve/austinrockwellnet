@@ -16,10 +16,10 @@ class BannerService(Service):
     @route("/api/banner/meeting/<int:crn>")
     async def fetch_meeting(self, crn: int) -> Response:
         with self.app.app_context():
-            return jsonify((await req.get(self.__meeting__.format(self.db.db.currentTerm, crn), verify=False)).json())
+            return jsonify((await req.get(self.__meeting__.format(self.db.db.currentCalendar.currentTerm, crn), verify=False)).json())
     
     async def details(self, crn: int) -> dict:
-        x = await req.post(self.__details__.format(self.db.db.currentTerm, crn), verify=False)
+        x = await req.post(self.__details__.format(self.db.db.currentCalendar.currentTerm, crn), verify=False)
         soup = BeautifulSoup(x.text, features="html.parser")
         return {
             k: soup.find(id=k).text for k in [
@@ -31,5 +31,3 @@ class BannerService(Service):
     async def fetch_details(self, crn: int) -> Response:
         with self.app.app_context():
             return jsonify(await self.details(crn))
-
-    

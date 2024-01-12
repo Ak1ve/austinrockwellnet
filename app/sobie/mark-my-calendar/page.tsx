@@ -665,14 +665,16 @@ function checkErr(error: any, calendarName: string): boolean {
 }
 
 export default function f() {
-    "use client";
-    const saved = localStorage === undefined || localStorage.getItem("calenderData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!);
-    const [data, _setData] = useState<CalendarData>(saved);
+    const [data, _setData] = useState<CalendarData>(newCalendarData());
     const setData = (x: any) => {
         localStorage.setItem("calendarData", JSON.stringify(x));
         _setData(x);
     }
     const [calendarData, setCalendarData] = useState(null as AcademicCalendarResponse | null);
+    useEffect(() => {
+        const saved = localStorage === undefined || localStorage.getItem("calenderData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!);
+        setData(saved);
+    }, []);
     const prop = <K1 extends keyof CalendarData,
         K2 extends keyof CalendarData[K1], K3 extends keyof CalendarData[K1][K2]>(k1: K1, k2?: K2, k3?: K3) => {
         return (e: any) => {

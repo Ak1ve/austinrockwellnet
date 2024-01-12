@@ -665,6 +665,7 @@ function checkErr(error: any, calendarName: string): boolean {
 }
 
 export default function f() {
+    "use client";
     const saved = localStorage === undefined || localStorage.getItem("calenderData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!);
     const [data, _setData] = useState<CalendarData>(saved);
     const setData = (x: any) => {

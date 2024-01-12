@@ -754,7 +754,7 @@ export default function f() {
         const cals = constructCalendars(data);
         console.log("Downloading Data:");
         console.log(data);
-        const names: (keyof Calendars)[] = ["academicCalendar", "assignments", "classes", "finals", "officeHours", "tutoring"] as const;
+        const names: (keyof Calendars)[] = ["academicCalendar", "assignments", "classes", "finals", "officeHours", "tutoring"];
         const wrap = (n: typeof names[number], callback: (val: string) => any) => {
             return (e: Error | undefined, value: string) => {
                 if (checkErr(e, n)) return;

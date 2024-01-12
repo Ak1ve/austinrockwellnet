@@ -665,7 +665,8 @@ function checkErr(error: any, calendarName: string): boolean {
 }
 
 export default function f() {
-    const [data, _setData] = useState<CalendarData>(localStorage.getItem("calendarData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!));
+    const saved = localStorage === undefined || localStorage.getItem("calenderData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!);
+    const [data, _setData] = useState<CalendarData>(saved);
     const setData = (x: any) => {
         localStorage.setItem("calendarData", JSON.stringify(x));
         _setData(x);

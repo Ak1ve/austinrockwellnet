@@ -491,7 +491,7 @@ function daysOff(calendar: CalendarData["academicCalendar"]): [number, number, n
         end.setHours(23);
         let current = start;
         while (((current as any) - (end as any)) <= 0) {
-            days.push([current.getFullYear(), current.getMonth() + 1, current.getDate()] as const);
+            days.push([current.getFullYear(), current.getMonth() + 1, current.getDate()]);
             current.setDate(current.getDate() + 1);
         }
     });
@@ -550,8 +550,8 @@ function constructSingleAssignments(cls: string, removeBeforeToday: boolean, ass
         end.setDate(end.getDate() + 1);
         return {
             title: cls + " - " + rest.join(" "),
-            start: [start.getFullYear(), start.getMonth() + 1, start.getDate()] as const,
-            end: [end.getFullYear(), end.getMonth() + 1, end.getDate()] as const
+            start: [start.getFullYear(), start.getMonth() + 1, start.getDate()],
+            end: [end.getFullYear(), end.getMonth() + 1, end.getDate()]
         }
     });
     return removeBeforeToday ? removePastEventList(list) : list;

@@ -99,3 +99,16 @@ export function Subtitle({className, variant, ...props}: SubtitleProps) {
         <div className={divClass} {...props}/>
     )
 }
+
+type LinkProps = React.HTMLProps<HTMLSpanElement> & VariantType & {
+    link: () => any
+    div?: boolean
+}
+export function Link({className, variant, link, div, ...props}: LinkProps) {
+    const spanClass = getAttrs("text", variant || "red", "hover:underline hover:cursor-pointer font-medium", className)
+    const span = <span className={spanClass} onClick={link} {...props}/>;
+    if (div) {
+        return <div>{span}</div>
+    };
+    return span;
+}

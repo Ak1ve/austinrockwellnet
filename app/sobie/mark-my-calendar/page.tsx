@@ -1,15 +1,18 @@
 "use client";
 import NavbarDefault from "@/components/Navbar";
 import { Checkbox, Input, InputGroup, InputSection, Textarea, WeekPicker } from "@/components/inputs";
-import { GoToLink, Subtitle, getAttrs } from "@/components/text";
-import React, { ButtonHTMLAttributes, useEffect, useState } from "react";
+import { GoToLink, Highlight, Link, Subtitle, TextBlock, getAttrs } from "@/components/text";
+import React, { ButtonHTMLAttributes, Ref, forwardRef, useEffect, useRef, useState } from "react";
 import { DaysOfWeek, WeekData, daysOfWeek } from "../types";
 import { AcademicCalendarPracticeResponse, AcademicCalendarResponse, Break, CRNDetailsPracticeResponse, CRNDetailsResponse, CRNLookupPracticeResponse, CRNLookupResponse, CalendarData, Class, MeetingTime, RecurringAssignment } from "./types";
 import classNames from "classnames";
 import { compress, decompress } from "compress-json";
 import { DateArray, DurationObject, EventAttributes, NodeCallback, createEvents } from "ics";
 import { datetime, RRule, RRuleSet, rrulestr } from "rrule";
-import {downloadZip } from "client-zip";
+import { downloadZip } from "client-zip";
+import Modal from "@/components/Modal";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 function minutesOff(refDate?: Date) {
     return (refDate === undefined ? new Date : refDate).getTimezoneOffset();
@@ -289,8 +292,8 @@ type ClassComponentProps = Omit<React.HTMLProps<HTMLDivElement>, "children" | "v
     academicCalendar: AcademicCalendarResponse | null
 }
 function ClassComponent({ value, onChange, onRemove, hide, className, academicCalendar, ...props }: ClassComponentProps) {
-    const [hideMeetings, setHideMeetings] = useState(true);
-    const [hideAssignments, setHideAssignments] = useState(true);
+    const [hideMeetings, setHideMeetings] = useState(value.classTimes.length > 0);
+    const [hideAssignments, setHideAssignments] = useState(value.singleAssignments.length > 0);
     const [adjustedFinal, setAdjustedFinal] = useState(false);
     const f = value.classTimes.length > 0 ? value.classTimes[0] : null;
     const [finalDate, finalTime] = getMeetingTimeString(f === null ? null : f.days, f === null ? "" : f.startTime, academicCalendar);
@@ -358,12 +361,12 @@ function ClassComponent({ value, onChange, onRemove, hide, className, academicCa
             ))}
             {!hideAssignments && <AddButton onClick={newProp("recurringAssignments")}>Add Weekly Recurring Assignment</AddButton>}
             <InputGroup>
-                <Input value={value.finalExam.date} dispatch={e=> {prop("finalExam", "date")(e); setAdjustedFinal(true)}} type="date">Final Exam Date</Input>
-                <Input value={value.finalExam.location} dispatch={e => {prop("finalExam", "location")(e); setAdjustedFinal(true)}}>Final Exam Location</Input>
+                <Input value={value.finalExam.date} dispatch={e => { prop("finalExam", "date")(e); setAdjustedFinal(true) }} type="date">Final Exam Date</Input>
+                <Input value={value.finalExam.location} dispatch={e => { prop("finalExam", "location")(e); setAdjustedFinal(true) }}>Final Exam Location</Input>
             </InputGroup>
             <InputGroup>
-                <Input value={value.finalExam.startTime} dispatch={e => {prop("finalExam", "startTime")(e); setAdjustedFinal(true)}} type="time">Final Exam Start Time</Input>
-                <Input value={value.finalExam.endTime} dispatch={e => {prop("finalExam", "endTime")(e); setAdjustedFinal(true)}} type="time">Final Exam End Time</Input>
+                <Input value={value.finalExam.startTime} dispatch={e => { prop("finalExam", "startTime")(e); setAdjustedFinal(true) }} type="time">Final Exam Start Time</Input>
+                <Input value={value.finalExam.endTime} dispatch={e => { prop("finalExam", "endTime")(e); setAdjustedFinal(true) }} type="time">Final Exam End Time</Input>
             </InputGroup>
             <Textarea value={value.finalExam.description} dispatch={prop("finalExam", "description")}>Final Exam Description</Textarea>
             <div className="flex justify-center">
@@ -646,8 +649,8 @@ function replace(s: string, calendarName: keyof Calendars): string {
     return s.replace("\nDTSTART:", "\nDTSTART;TZID=America/New_York:");
 }
 
-function downloadZipped(files: {name: string, input: string, mode: keyof Calendars}[]) {
-    downloadZip(files.map(x => ({name: x.name, input: replace(x.input, x.mode), lastModified: new Date()}))).blob().then(blob => {
+function downloadZipped(files: { name: string, input: string, mode: keyof Calendars }[]) {
+    downloadZip(files.map(x => ({ name: x.name, input: replace(x.input, x.mode), lastModified: new Date() }))).blob().then(blob => {
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob)
         link.download = "schedule.zip";
@@ -664,8 +667,25 @@ function checkErr(error: any, calendarName: string): boolean {
     return false;
 }
 
+const jumps = ["quickStart", "loadingCRN", "importing", "classStructure", "downloading", "classCode", "classStructureMeetingTime", "classStructureAssignments", "setup", "classStructureFinals"] as const;
+
+type JumpType = {
+    [key in typeof jumps[number]]: any
+}
+
 export default function f() {
     const [data, _setData] = useState<CalendarData>(newCalendarData());
+    const refs = Object.fromEntries(jumps.map(x => [x, useRef(null)])) as JumpType;
+    const router = useRouter();
+    const query = useSearchParams();
+    useEffect(() => {
+        if (query.has("scrollTo")) {
+            const ref = (refs as any)[query.get("scrollTo") as any] as any;
+            if (ref !== undefined && ref !== null && ref.current !== null) {
+                ref.current.scrollIntoView({behavior: "smooth"});
+            }
+        }
+    }, [query]);
     const setData = (x: any) => {
         localStorage.setItem("calendarData", JSON.stringify(x));
         _setData(x);
@@ -691,10 +711,10 @@ export default function f() {
         promise.then(cal => {
             setCalendarData(cal);
             const saved = localStorage.getItem("calendarData") === null ? newCalendarData() : JSON.parse(localStorage.getItem("calendarData")!);
-            const val = {...saved};
+            const val = { ...saved };
             val.academicCalendar.semesterStart = cal.semesterStart;
             val.academicCalendar.semesterEnd = cal.semesterEnd;
-            val.academicCalendar.readingPeriod = {startDate: cal.readingPeriodStart, endDate: cal.readingPeriodEnd};
+            val.academicCalendar.readingPeriod = { startDate: cal.readingPeriodStart, endDate: cal.readingPeriodEnd };
             val.academicCalendar.breakTimes = cal.breaks;
             setData(val);
         });
@@ -736,7 +756,7 @@ export default function f() {
 
     const removeBreak = (i: number) => {
         const val = { ...data };
-        val.academicCalendar.breakTimes =  val.academicCalendar.breakTimes.filter((v, idx) => idx !== i);
+        val.academicCalendar.breakTimes = val.academicCalendar.breakTimes.filter((v, idx) => idx !== i);
         setData(val);
     }
 
@@ -772,12 +792,12 @@ export default function f() {
                         ce("officeHours", (officeHours) => {
                             ce("tutoring", (tutoring) => {
                                 downloadZipped([
-                                    {name: "Academic Calendar.ics", input: academicCalendar, mode:"academicCalendar"},
-                                    {name: "Assignments.ics", input: assignments, mode:"assignments"},
-                                    {name: "Classes.ics", input: classes, mode:"classes"},
-                                    {name: "Finals.ics", input: finals, mode:"finals"},
-                                    {name: "Office Hours.ics", input: officeHours, mode:"officeHours"},
-                                    {name: "Tutoring.ics", input: tutoring, mode:"tutoring"},
+                                    { name: "Academic Calendar.ics", input: academicCalendar, mode: "academicCalendar" },
+                                    { name: "Assignments.ics", input: assignments, mode: "assignments" },
+                                    { name: "Classes.ics", input: classes, mode: "classes" },
+                                    { name: "Finals.ics", input: finals, mode: "finals" },
+                                    { name: "Office Hours.ics", input: officeHours, mode: "officeHours" },
+                                    { name: "Tutoring.ics", input: tutoring, mode: "tutoring" },
                                 ]);
 
                             })
@@ -788,9 +808,143 @@ export default function f() {
         });
     }
 
+    const push = (...s: string[]) => {
+        return () => {
+            let n = "/sobie/mark-my-calendar";
+            if (s.length > 0) {
+                n += "?" + s.join("&");
+            }
+            router.push(n);
+        }
+    };
+
+    const link = (s: typeof jumps[number], v?: "red"|"yellow", d?: boolean) => {
+        return {link: push("showHelp=1", `scrollTo=${s}`), variant: v || "red", div: d || false};
+    }
+
     // mm/dd/yyyy
     return (<>
         <NavbarDefault active="Mark My Calendar" />
+        <Modal show={query.has("showHelp")} title="Mark My Calendar Help" onExit={push()}>
+            <TextBlock variant="yellow">Welcome to <Highlight variant="yellow">Mark My Calendar</Highlight>! This tool is designed to make your class schedule easier,
+                allowing you to easily keep track of classes, office hours, tutoring, and assignments. Keep in mind that
+                <Highlight variant="yellow"> Mark My Calendar</Highlight> is intended to be used on a computer. This tool also has not been
+                tested in other timezones and will likely break if you are currently not in Oberlin's timezone.
+            </TextBlock>
+            <hr />
+            <Subtitle variant="yellow">Table of Contents (click to jump to in guide)</Subtitle>
+            <hr />
+            <div className="text-center">
+                    <Link {...link("quickStart", undefined, true)}>Quick-Start</Link>
+                    <Link {...link("classStructure", undefined, true)}>The Class Structure</Link>
+                    <Link {...link("loadingCRN", undefined, true)}>Loading from CRN</Link>
+                    <Link {...link("classCode", undefined, true)}>Loading from Class Code</Link>
+                    <Link {...link("downloading", undefined, true)}>Downloading Calendars</Link>
+                    <Link {...link("importing", undefined, true)}>Importing into Google Calendar</Link>
+                    <Link {...link("setup", undefined, true)}>Style Guide</Link>
+            </div>
+            <div ref={refs.quickStart} className="mt-10" />
+            <Subtitle variant="yellow">Quick-Start</Subtitle>
+            <hr />
+            <TextBlock>This section will get you started in importing your classes quickly.</TextBlock>
+            <p className="px-5">For a quick start, simply click the "<Link {...link("loadingCRN")}>Load From CRN</Link>" button and paste in a CRN number from one of your courses (e.g. 27141).
+             The CRN number can be found in banner service where you registered for your classes. After entering the CRN number, press OK. This should automatically load
+              the course title, and class meeting information.
+             </p>
+            <p className="mt-1 px-5">For adding additional meeting times, you can click "Show Meeting Times" and proceeed to click to add more meeting times regarding office hours and tutoring sessions.</p>
+            <p className="mt-1 px-5">For assignments, you can either add a weekly recurring assignment or type out assignments in the following format:</p>
+            <TextBlock className="ml-10">10/23 Rough Draft Due<br/>10/30 Final Draft Due</TextBlock>
+            <p className="mt-1 px-5">The final exam time is automatically loaded from the exam schedule posted by Oberlin, but it may not be accurate if your class is irregular, such as CHEM 102. Double check your provided syllabus or consult
+             the <a href="https://www.oberlin.edu/registrar/final-exams" target="_blank" className={getAttrs("text", "red", "underline")}>Oberlin Final Exam Schedule</a>.</p>
+            <p className="mt-1 px-5">Repeat this process for your remaining classes. You are then ready to <Link {...link("downloading")}>download</Link> and <Link {...link("importing", "yellow")}>import into google calendar</Link>.</p>
+            <div ref={refs.classStructure}/>
+            <Subtitle variant="yellow">Class Structure</Subtitle>
+            <hr />
+            <TextBlock>This section will go provide in-depth details of the individul components of a class and how to utilize them effectively.</TextBlock>
+            <p className="mt-1 px-5">A class has three main components: meeting times, assignments, and the final exam. We will go over them in detail:</p>
+            <div ref={refs.classStructureMeetingTime}>Meeting Times</div>
+            <hr />
+            <p className="mt-1 px-5">A Meeting Time is any chunk of time that happens weekly and at the same time. There are three types of meeting times:
+                the classes themselves, office hour sessions, and tutoring sessions.
+            </p>
+            <p className="mt-1 px-5">The class meeting time is where you will fill out when your classes meet. For example, let's say you are taking CSCI 150 that meets MWF 9:00am-9:50,
+             and has a weekly lab meeting on mondays at 4:30pm. To add these into <Highlight variant="yellow">Mark My Calendar</Highlight>, we will add 2 meeting times. For the first one,
+             we will click the "Add Class Meeting Time". It should then autofill the Class meeting Title (this can be adjusted). We will then click M, W, F to highlight the days to red.
+             We will then type in 9:00am for the starting time. The end time will auto-fill with 9:50 as the class meets 3 times a week. You can then fill out the location (King 101) and description for class.
+              The description is optional, but can be used to provide some quick-links, for example linking to blackboard. This process can then be repeated for the lab session. Keep in mind that manually adding class
+               times is discouraged over simply <Link {...link("loadingCRN")}>loading from CRN</Link>.</p>
+            <p className="mt-1 px-5">The same process can then be applied to your professor's office hours and tutoring sessions (if applicable). For the office hour descriptions, it might be useful to include an
+             office hour appointment from your professor. An additional note is that when <Link {...link("importing")}>importing into google calendar</Link>, classes will automatically set your availability as "busy" during those times.
+              It will not do this for office hours or tutoring</p>
+            <div ref={refs.classStructureAssignments}>Assignments</div>
+            <hr />
+            <p className="mt-1 px-5">Assignments show up as all-day events in your google calendar. They are separated by single assignments and weekly assignments.</p>
+            <p className="mt-1 px-5">Single assignments are typed out all in one textbox for ease of use. They are typed in the following format:</p>
+            <TextBlock className="ml-10">10/30 Rough Draft Due<br/>11/1 Final Draft Due<br/>2/5 Really Late Semester Apparently</TextBlock>
+            <p className="mt-1 px-5">These assignments will then show up as 3 events in your google calendar. It is important to note that every assignment must be a new line, and that
+            the date follows the MM/DD format. A space is also required between the date and assignment title.  The assignment title will also be prefixed with the class's subject name.
+             If the above assignments were apart of a Computer Science 150-01 class, then the titles will be "Computer Science 150-01 Rough Draft Due", etc.</p>
+            <p className="mt-1 px-5">Weekly assignments are setup very similarly to <Link {...link("classStructureMeetingTime")}>meeting times</Link>. Simply type the name of the assignment (i.e. "Math HW Due")
+             and click the days that they are due. The description can be used to provide easy links such as the blackboard link to the class. It is important to note that weekly assignments do not prefix
+              the assignment with the class name. So a weekly assignment of "Math HW due" will only show up as "Math Hw due" in google calendar, not "Mathematics 220-01 Math Hw Due".</p>
+            <div ref={refs.classStructureFinals}>Finals</div>
+            <hr />
+            <p className="mt-1 px-5">The finals section is straightfoward. It will simply look at the first <Link {...link("classStructureMeetingTime")}>class meeting time</Link>. And determine the final meeting time from
+             there. Keep in mind that this process is not perfect, and it can be wrong. For example, if you filled out the lab meeting time first, then the class meeting time, it will look at the lab meeting time to determine when your final is.
+            <Highlight variant="yellow"> Mark My Calendar</Highlight> will also fail at classes that are irregular. Consult your syllabus for the correct time, or look at
+              the <a href="https://www.oberlin.edu/registrar/final-exams" target="_blank" className={getAttrs("text", "red", "underline")}>Oberlin Final Exam Schedule</a> for the most accurate times. It will also auto-fill the final location information
+               based on the first class meeting. Double check your syllabus to ensure accurate information</p>
+            <div ref={refs.loadingCRN} />
+            <Subtitle variant="yellow">Loading from CRN</Subtitle>
+            <hr />
+            <p className="mt-1 px-5">The "Load CRN" button is designed to do some of the heavy lifting of filling out class information. Simply click the "Load CRN" button
+             and paste in the CRN number (e.g. 27141). After a couple seconds (it can be a bit slow), the class will then be added with the course title, location, and class meeting times filled out.
+              Double check the meeting times and ensure they are correct. The <Link {...link("classStructureFinals")}>final exam time</Link> will also be determined based on the meeting time.
+              Ensure that this is accurate as well.</p>
+            <div ref={refs.classCode} />
+            <Subtitle variant="yellow">Loading from Class Code</Subtitle>
+            <hr />
+            <p className="mt-1 px-5"><Highlight variant="yellow">Mark My Calendar</Highlight> offers a easy-to-use method for sharing class information.
+             If a classmate has already put in the information for CSCI 150, they can simply click the "Copy Class Code" button at the bottom of the class, then share it with you.
+             Then, all you have to do is simply paste in the information after hitting the "Load Class Code" button. You will then have the class ready to <Link {...link("importing")}>import</Link>! Here is what a class code looks like: </p>
+            <TextBlock variant="red" className="ml-10 break-words">[["classTimes","officeHourTimes","tutoringTimes","singleAssignments","recurringAssignments","name","course","finalExam","a|0|1|2|3|4|5|6|7","title","location","days","startTime","endTime","description","a|9|A|B|C|D|E","","Among us","monday","tuesday","wednesday","thursday","friday","saturday","sunday","a|I|J|K|L|M|N|O","b|T","b|F","o|P|Q|R|Q|R|Q|R|R","10:00","10:50","This is a class Description","o|F|G|H|S|T|U|V","a|W","a|","CSCI 150","date","a|a|A|C|D|E","2024-05-13","14:00","16:00","You have done a good job of looking at the example! Gold star for you","o|b|c|H|d|e|f","o|8|X|Y|Y|G|Y|G|Z|g"],"h"]</TextBlock>
+            <p className="mt-1 px-5">It is long, but it is merely a compressed version of the underlying data that represents the class. Unfortunately, I cannot do much else without doing a lot more on the server-side of this application. In the future, I might implement this.</p>
+            <div ref={refs.downloading} />
+            <Subtitle variant="yellow">Downloading Calendars</Subtitle>
+            <hr />
+            <TextBlock>This section requires that you are on a computer.</TextBlock>
+            <p className="mt-1 px-5">In order to load the classes into google calendar, you must download the calendars yourself and then <Link {...link("importing")}>import them</Link> into google calendar.
+             At the bottom <Highlight variant="yellow">Mark My Calendar</Highlight> are a few options for download:</p>
+             <TextBlock variant="yellow" className="ml-10"><span className="font-bold">Remove Classes on Breaks</span>: if this is checked, classes that fall on breaks during the academic calendar will be removed
+             <br/><span className="font-bold">Remove Office Hours on Breaks</span>: if this is checked, office hour sessions that fall on breaks during the academic calendar will be removed
+             <br/><span className="font-bold">Remove Tutoring on Breaks</span>: if this is checked, tutoring sessions that fall on breaks during the academic calendar will be removed
+             <br/><span className="font-bold">Remove Events before today</span>: any event that happens before today will not show up in google calendar.
+             </TextBlock>
+            <p className="mt-1 px-5">Once you select your preferences, you can then download. If you only plan on <Link {...link("importing")}>importing</Link> all class information, I would recommend
+             the "Download All Calendars" button. It will then download a zip file which needs to be unzipped before importing. However, if you cannot unzip, or if you only plan on using a couple calendars, you can
+             do the individual downloads to download your preferences. You are now ready to <Link {...link("importing")}>import into google calendar</Link>!
+             </p>
+            <div ref={refs.importing} />
+            <Subtitle variant="yellow">Importing into Google Calendar</Subtitle>
+            <hr />
+            <p className="mt-1 px-5">Now that you have downloaded your desired calendars, head to <a href="https://calendar.google.com/" target="_blank" className={getAttrs("text", "red", "underline")}>google calendar</a>.
+             Under "Other Calendars" click the plus sign, then click "Import"</p>
+             <img src="https://i.imgur.com/9XmGJ5d.png" title="source: imgur.com" />
+            <p className="mt-1 px-5">After that, select a file (needs to be unzipped) and choose which calendar to import to.</p>
+            <img src="https://i.imgur.com/cbpbVdM.png" title="source: imgur.com" />
+            <p className="mt-1 px-5">The <Link {...link("setup")}>guide</Link> below explains a good setup with how to import the calendars and keep things pretty.</p>
+            <div ref={refs.setup} />
+            <Subtitle variant="yellow">Style Guide</Subtitle>
+            <hr />
+            <p className="mt-1 px-5">Keeping track of classes, office hours, tutoring, the academic calendar, assignments and finals all in one calendar is
+             incredibly dense! As such, I would recomment 3 calendars: one for school / academic calendar / finals, one for assignments, and one for tutoring / office hours like so:</p>
+             <img src="https://i.imgur.com/tlDUes7.png" title="source: imgur.com" />
+            <p className="mt-1 px-5">This way, you can easily toggle the less-needed information (such as tutoring and office hours), but still have access to 
+            it if needed!</p>
+        </Modal>
+        <div className="flex justify-center w-full">
+            <button className={getAttrs(["text"], "red", "underline")} onClick={push("showHelp=1")}>Click here to view a guide on how to use this tool</button>
+        </div>
         {data.classes.map((v, i) => (
             <ClassComponent key={i} value={v} academicCalendar={calendarData} onChange={prop("classes", i)} onRemove={() => removeClass(i)} />
         ))}
@@ -829,12 +983,12 @@ export default function f() {
                     dispatch={prop("options", "removePastEvents")}>Remove Events Before Today</Checkbox>
             </InputGroup>
             <Subtitle variant="yellow" className="mt-5">Download</Subtitle>
-            <hr className="mb-3"/>
+            <hr className="mb-3" />
             <div className="flex justify-center gap-5">
                 <AddButton onClick={downloadAll}>Download All Calendars</AddButton>
             </div>
             <Subtitle variant="yellow" className="mt-5">Individual Download</Subtitle>
-            <hr className="mb-3"/>
+            <hr className="mb-3" />
             <div className="flex justify-center gap-5">
                 <AddButton onClick={downloadCalendar("classes")}>Download Class Schedule</AddButton>
                 <AddButton onClick={downloadCalendar("assignments")}>Download Assignments</AddButton>

@@ -4,7 +4,7 @@ import React, { Children, useState } from "react";
 import Select from "react-select";
 import { Colors, getAttrs } from "./text";
 const labelClass = "block mb-2 text-sm text-[#e81727] font-bold font-serif";
-const inputClass = "bg-gray-50 border dark:bg-gray-800 dark:text-white border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
+const inputClass = "bg-gray-50 border dark:bg-[#120C0B] dark:text-white border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
 
 type InputExtensionProps = {
     children: string | string[],
@@ -38,7 +38,7 @@ type CheckboxProps = Omit<InputProps, "checked"|"value"|"dispatch"> & {
 };
 export function Checkbox({ labelClassName, value, labelProps, divClassName, divProps, className, children, dispatch, ...props }: CheckboxProps) {
     const labelCls = classNames("ms-2 text-sm font-bold text-gray-900 dark:text-gray-300", labelClassName);
-    const inputCls = classNames("w-4 h-4 text-[#e81727] bg-gray-100 border-gray-300 rounded focus:ring-[#e81727] dark:focus:ring-[#e81727] accent-[#e81727] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600", className);
+    const inputCls = classNames("w-4 h-4 text-[#e81727] bg-gray-100 border-gray-300 rounded focus:ring-[#e81727] dark:focus:ring-[#e81727] accent-[#e81727] dark:ring-offset-gray-800 focus:ring-2 dark:bg-[#120C0B] dark:border-gray-600", className);
     const divCls = classNames("flex items-center", divClassName);
     return (
         <div className={divCls} onClick={() => dispatch(!value)} {...divProps}>
@@ -104,7 +104,7 @@ type WeekPickerDayProps = {
 }
 function WeekPickerDay({ onClick, day, active }: WeekPickerDayProps) {
     const activeColor = Colors.red["!bg"];
-    let weekClass = classNames("relative select-none hover:cursor-pointer w-8 h-8 bg-gray-100 dark:bg-gray-500 dark:text-white rounded-full flex justify-center items-center text-center p-4 shadow-md", {
+    let weekClass = classNames("relative select-none hover:cursor-pointer w-8 h-8 bg-gray-100 dark:bg-[#120C0B] dark:text-white rounded-full flex justify-center items-center text-center p-4 shadow-md", {
         "hover:bg-red-200 dark:hover:bg-red-500": !active,
     });
     if (active) weekClass += " " + activeColor;
@@ -146,7 +146,7 @@ function InnerWeekPicker({ onChange, value, ...props }: InnerWeekPickerProps) {
 type WeekPickerProps = InnerWeekPickerProps & Omit<InputExtensionProps, "dispatch">;
 export function WeekPicker({ labelClassName, labelProps, divClassName, divProps, className, children, value, onChange, ...props }: WeekPickerProps) {
     const labelCls = classNames(labelClass, labelClassName)
-    const inputClass = classNames("bg-gray-50 dark:bg-gray-800 border justify-between dark:text-white text-gray-900 text-xl rounded-lg block w-full p-2.5 flex", className);
+    const inputClass = classNames("bg-gray-50 dark:bg-[#120C0B] border justify-between dark:text-white text-gray-900 text-xl rounded-lg block w-full p-2.5 flex", className);
     return (
         <div className={divClassName} {...divProps}>
             <label className={labelCls} {...labelProps}>{children}</label>

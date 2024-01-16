@@ -256,7 +256,7 @@ type CollapseAccordion = LoadedCollapse | UnloadedCollapse
 function DayCollapse(props: CollapseAccordion) {
     const header = (
         <AccordionItemHeading className="accordion__heading!border-none">
-            <AccordionItemButton className="accordion__button !text-[#e81727] !bg-white dark:!bg-[#102124] font-serif uppercase !border-none">{props.dayString}
+            <AccordionItemButton className="accordion__button !text-[#e81727] !bg-white dark:!bg-[#120C0B] font-serif uppercase !border-none">{props.dayString}
             </AccordionItemButton>
         </AccordionItemHeading>
     );

@@ -718,7 +718,7 @@ export default function f() {
             val.academicCalendar.breakTimes = cal.breaks;
             setData(val);
         });
-    }, []);
+    }, [query.toString()]);
 
     const addClass = (x: Class) => {
         const val = { ...data };
@@ -814,7 +814,7 @@ export default function f() {
             if (s.length > 0) {
                 n += "?" + s.join("&");
             }
-            router.push(n);
+            router.replace(n);
         }
     };
 

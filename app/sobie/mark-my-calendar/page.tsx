@@ -646,7 +646,7 @@ function replace(s: string, calendarName: keyof Calendars): string {
     if (calendarName === "academicCalendar" || calendarName == "assignments") {
         return s;
     }
-    return s.replace("\nDTSTART:", "\nDTSTART;TZID=America/New_York:");
+    return s.replaceAll("\nDTSTART:", "\nDTSTART;TZID=America/New_York:");
 }
 
 function downloadZipped(files: { name: string, input: string, mode: keyof Calendars }[]) {

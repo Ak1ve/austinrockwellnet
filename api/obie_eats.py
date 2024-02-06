@@ -11,6 +11,7 @@ import asyncio
 import requests_async as req
 from pydantic import BaseModel, TypeAdapter
 from .service import Service, route
+import json
 
 T = TypeVar("T")
 
@@ -152,7 +153,7 @@ class Menu(Generic[T]):
                 self.days[d] = "unavailable"
             return self
             
-        
+
 class ObieEatsService(Service):
     _ISO_WEEK = {
         "monday": 1,
@@ -188,6 +189,53 @@ class ObieEatsService(Service):
         return {
             k: (now + datetime.timedelta(days=-(day - v))).strftime("%m/%d/%Y") for k, v in self._ISO_WEEK.items()
         }
+    
+    async def dish(self, location_name: str) -> Menu[Day[str]]:
+        """
+        https://dish.avifoodsystems.com/api/menu-items/week?date=2/5/2024&locationId=107&mealId=174
+
+        location_name: clarity|lord|heritage
+        meal_id: lunch|dinner
+        date: 2/5/2024
+
+        location    loc id      lunch id        dinner id
+        clarity     107         174             175
+        lord        184         XXX             470
+        heritage    185         479             480
+        
+        """
+        table = {
+            "clarity": {
+                "location": 107,
+                "lunch": 174,
+                "dinner": 175
+            },
+            "lord": {
+                "location": 184,
+                "lunch": None,
+                "dinner": 470
+            },
+            "heritage": {
+                "location": 185,
+                "lunch": 479,
+                "dinner": 480
+            }
+        }
+        base = "https://dish.avifoodsystems.com/api/menu-items/week?date={}&locationId={}&mealId={}"
+        week = self.get_week()
+        first = week["monday"]
+        # m/d/Y
+        times = {k: f"{v.split('/')[-1]}-{v.split('/')[0]}-{v.split('/')[1]}T00:00:00" for k, v in week.items()}
+        lunches = []
+        dining_hall = table[location_name]
+        if location_name != "lord":
+            lunches = json.loads((await req.get(base.format(first, dining_hall["location"], dining_hall["lunch"]), verify=False)).text)
+        dinners = json.loads((await req.get(base.format(first, dining_hall["location"], dining_hall["dinner"]), verify=False)).text)
+        return Menu({
+            k: Day(lunch=", ".join(x["name"] for x in lunches if x["date"] == v),
+                   dinner=", ".join(x["name"] for x in dinners if x["date"] == v)) for k, v in times.items()
+        })
+        ...
 
     async def get_stevie_week(self) -> Menu[Day[Station]]:
         week = self.get_week()
@@ -202,7 +250,7 @@ class ObieEatsService(Service):
             txt = txt.replace(key, value)
         return txt
 
-    async def get_menu(self, link: str) -> Menu[Day[str]]:
+    async def get_menu(self, link: str, name: str = "") -> Menu[Day[str]]:
         try:
             reader = Pdf.PdfReader(io.BytesIO((await req.get(link, verify=False)).content))
             text = "\n".join(reader.pages[x].extract_text() for x in range(len(reader.pages)))
@@ -215,14 +263,16 @@ class ObieEatsService(Service):
                 form_regex=self._form_regex
             )
         except Exception as e:
-            print(e)
-            return Menu()
+            try:
+                return await self.dish(name)
+            except Exception as e2:
+                return Menu()
 
     async def get_dining_halls(self) -> Menu[Day[DiningHalls]]:
         w = datetime.datetime.now().isocalendar()[1]
-        dining_halls = [self.get_menu(self._clarity_root_link.format(w)),
-                        self.get_menu(self._heritage_root_link.format(w)),
-                        self.get_menu(self._lord_saunders_root_link.format(w))]
+        dining_halls = [self.get_menu(self._clarity_root_link.format(w), "clarity"),
+                        self.get_menu(self._heritage_root_link.format(w), "heritage"),
+                        self.get_menu(self._lord_saunders_root_link.format(w),  "lord")]
         clarity, heritage, lord_saunders = await asyncio.gather(*dining_halls)  # NOQA
         return DiningHalls.from_menus(clarity=clarity, heritage=heritage, lord_saunders=lord_saunders)
 

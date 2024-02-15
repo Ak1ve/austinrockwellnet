@@ -26,7 +26,7 @@ function Notification(props: { body: string }) {
     
     const dismiss = () => {
         setDismissed(dismissedMessages.concat([props.body]));
-        localStorage.setItem("dismissedMessages", JSON.stringify(dismissedMessages));
+        localStorage.setItem("dismissedMessages", JSON.stringify(dismissedMessages.concat([props.body])));
         setShow(false);
     }
 

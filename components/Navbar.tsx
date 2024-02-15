@@ -19,6 +19,17 @@ function NavItem(props: { link: string, title: string, active: boolean }) {
 
 function Notification(props: { body: string }) {
     const [show, setShow] = useState(true);
+    const [dismissedMessages, setDismissed] = useState([] as string[]);
+    useEffect(() => {
+        setDismissed(JSON.parse(localStorage.getItem("dismissedMessages") || "[]"));
+    }, []);
+    
+    const dismiss = () => {
+        setDismissed(dismissedMessages.concat([props.body]));
+        localStorage.setItem("dismissedMessages", JSON.stringify(dismissedMessages));
+        setShow(false);
+    }
+
     useEffect(() => {
         setShow(true);
     }, [props.body]);
@@ -34,6 +45,9 @@ function Notification(props: { body: string }) {
         s: "text-green-800 border-green-300 bg-green-50 dark:bg-green-800 dark:text-green-400 dark:border-green-800",
 
     } as any;
+    if (dismissedMessages.findIndex(x => x === props.body) > 0) {
+        return <></>;
+    }
     return (<>
         <div className="fixed h-fit left-[7.5%] z-10 w-[85%] bottom-6 lg:bottom-0 lg:top-20">
             <div className={"flex items-center p-4 mb-4 text-sm border rounded-lg " + colors[mode]} role="alert">
@@ -41,7 +55,7 @@ function Notification(props: { body: string }) {
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                 </svg>
                 <div dangerouslySetInnerHTML={{ __html: props.body.substring(2) }} />
-                <div className="ml-auto hover:cursor-pointer hover:underline" onClick={x => setShow(false)}>x</div>
+                <div className="ml-auto hover:cursor-pointer hover:underline" onClick={x => dismiss()}>x</div>
             </div>
         </div>
         <div className="lg:mb-20" />

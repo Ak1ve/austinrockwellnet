@@ -36,5 +36,6 @@ class NotificationService(Service):
         value = body["value"]
         if hashlib.sha256(raw_password.encode()).hexdigest() == self.db.db.adminHash:
             self.db.db.notifications[route] = value
+            self.db.db.save()
             return "True"
         return "False"

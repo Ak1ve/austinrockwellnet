@@ -252,21 +252,21 @@ class ObieEatsService(Service):
 
     async def get_menu(self, link: str, name: str = "") -> Menu[Day[str]]:
         try:
-            reader = Pdf.PdfReader(io.BytesIO((await req.get(link, verify=False)).content))
-            text = "\n".join(reader.pages[x].extract_text() for x in range(len(reader.pages)))
-            page = self.clean_menu_text(text)
-            pages = [x for x in self._days_regex.split(page) if x is not None]
-            return Menu.from_pages(
-                name=pages[0],
-                pages=pages[1:],
-                day_regex=self._days_regex,
-                form_regex=self._form_regex
-            )
-        except Exception as e:
-            try:
-                return await self.dish(name)
-            except Exception as e2:
-                return Menu()
+            return await self.dish(name)
+        except Exception as e1:
+                try:
+                    reader = Pdf.PdfReader(io.BytesIO((await req.get(link, verify=False)).content))
+                    text = "\n".join(reader.pages[x].extract_text() for x in range(len(reader.pages)))
+                    page = self.clean_menu_text(text)
+                    pages = [x for x in self._days_regex.split(page) if x is not None]
+                    return Menu.from_pages(
+                        name=pages[0],
+                        pages=pages[1:],
+                        day_regex=self._days_regex,
+                        form_regex=self._form_regex
+                    )
+                except Exception as e2:
+                    return Menu()
 
     async def get_dining_halls(self) -> Menu[Day[DiningHalls]]:
         w = datetime.datetime.now().isocalendar()[1]

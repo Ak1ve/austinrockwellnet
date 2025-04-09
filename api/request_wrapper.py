@@ -6,4 +6,4 @@ async def get(*args, **kwargs):
     if "verify" in kwargs:
         del kwargs["verify"]
     async with httpx.AsyncClient(verify=verify) as client:
-        return client.get(*args, **kwargs)
+        return await client.get(*args, **kwargs)

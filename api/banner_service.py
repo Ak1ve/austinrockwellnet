@@ -1,6 +1,7 @@
 from .service import Service, route
 from flask import jsonify, Response
-import requests_async as req
+from . import request_wrapper as req
+# import requests_async as req
 from .db_service import DatabaseService
 from bs4 import BeautifulSoup
 

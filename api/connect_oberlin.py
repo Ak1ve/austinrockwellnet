@@ -1,8 +1,8 @@
 from .service import Service, route
 from flask import jsonify
 import PyPDF2 as Pdf
-import requests_async as req
-
+from . import request_wrapper as req
+# import requests_async as req
 
 class ConnectOberlinService(Service):
     @route("/api/presence")

@@ -8,12 +8,15 @@ import io
 import re
 import PyPDF2 as Pdf
 import asyncio
-import requests_async as req
+from . import request_wrapper as req
+# import requests_async as req
 from pydantic import BaseModel, TypeAdapter
 from .service import Service, route
 import json
 
 T = TypeVar("T")
+
+
 
 
 class Food(BaseModel):

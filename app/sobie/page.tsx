@@ -59,8 +59,8 @@ export default function f() {
             <Title>About This Project</Title>
             <ObieText title="Meet the creator" image={ME_IMAGE}>
                 <p className="border-l-4 border-[#e81727] pl-2 mb-2">
-                    Hello!  My name is Austin Rockwell, and I am the creator of this project!  I am a first-year, and I plan to 
-                    major in math and computer science.  Making {SOBIE} has been a very fun project as I love seeing others
+                    Hello!  My name is Autumn Rockwell, and I am the creator of this project!  I am a graduating in '27, and I am 
+                    majoring in math and computer science.  Making {SOBIE} has been a very fun project as I love seeing others
                     benefit from tools that I create!  This project started out with me creating {OBIE_EATS}, and I decided
                     to expand from there.  Some fun facts about me: I am from Ohio, I love the TV show Bluey, and I love music!
                     I would love to meet some new faces!  Please feel free to follow/message me on social media :)

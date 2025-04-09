@@ -18,12 +18,12 @@ export default function Index() {
         <a href="/me.png" target="_blank">
           <Image height={200} width={200} src="/me.png" alt="A photo of me" className="mx-auto mt-10 lg:mt-0 rounded-3xl border-[#fd0d4d] border-2" />
         </a>
-        <div className="font-bold text-4xl lg:text-7xl self-center">Austin Rockwell</div>
+        <div className="font-bold text-4xl lg:text-7xl self-center">Autumn Rockwell</div>
       </div>
       <div className="lg:flex lg:justify-between lg:w-[60%] mt-10 mx-auto w-fit text-center">
         <IconLink href="https://www.instagram.com/magic.marinara/" icon={INSTAGRAM}>Instagram</IconLink>
-        <IconLink href="https://www.linkedin.com/in/austin-rockwell-0593b527b/" icon={LINKEDIN}>LinkedIn</IconLink>
-        <IconLink href="mailto:rockwell.austin04@gmail.com" icon={EMAIl}>Email Me</IconLink>
+        <IconLink href="https://www.linkedin.com/in/autumn-rockwell-0593b527b/" icon={LINKEDIN}>LinkedIn</IconLink>
+        <IconLink href="mailto:autumnrockwell04@gmail.com" icon={EMAIl}>Email Me</IconLink>
         <IconLink href="https://github.com/Ak1ve" icon={GITHUB}>Github</IconLink>
         <IconLink href="tel:419-706-5906" icon={PHONE}>Text Me</IconLink>
         

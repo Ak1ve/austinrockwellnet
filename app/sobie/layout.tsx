@@ -1,6 +1,6 @@
 export const metadata = {
     title: 'SOBIE',
-    description: 'Austin Rockwell',
+    description: 'Autumn Rockwell',
 }
 
 // dark red : #a6192e

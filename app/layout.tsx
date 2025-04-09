@@ -1,8 +1,8 @@
 import { Analytics } from '@vercel/analytics/react';
 import "./global.css";
 export const metadata = {
-  title: 'Austin Rockwell',
-  description: 'Austin Rockwell',
+  title: 'Autumn Rockwell',
+  description: 'Autumn Rockwell',
 }
 
 

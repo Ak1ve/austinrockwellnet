@@ -119,10 +119,10 @@ function decompressClass(cls: string): Class {
 }
 
 function classFromCRN(crn: number, academicCalendar: AcademicCalendarResponse | null): Promise<Class> {
-    const meeting = fetch(`https://www.austinrockwell.net/api/banner/meeting/${crn}`).then(x => {
+    const meeting = fetch(`/api/banner/meeting/${crn}`).then(x => {
         return x.json();
     });
-    const details = fetch(`https://www.austinrockwell.net/api/banner/details/${crn}`).then(x => {
+    const details = fetch(`/api/banner/details/${crn}`).then(x => {
         return x.json();
     })
     // const meeting = Promise.resolve(CRNLookupPracticeResponse);
@@ -706,7 +706,7 @@ export default function f() {
         }
     };
     useEffect(() => {
-        const promise = fetch("https://www.austinrockwell.net/api/db/calendar").then(x => x.json());
+        const promise = fetch("/api/db/calendar").then(x => x.json());
         // const promise = Promise.resolve(AcademicCalendarPracticeResponse);
         promise.then(cal => {
             setCalendarData(cal);

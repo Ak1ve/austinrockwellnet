@@ -179,7 +179,7 @@ function DayMenu(props: { name: string, menu: string, mode: string, loading?: fa
     return (
         <>
             <div>{props.name}:<br />
-                <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div><div className="text-gray-700 dark:text-[#f9f9f9]">{props.menu}</div>
+                <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div> 
         </>
     );
 }
@@ -307,7 +307,7 @@ function Index() {
     const [menu, setMenu] = useState(null as MenuResponse | null);
     const [currentDay, setCurrentDay] = useState(null as string | null);
       useEffect(() => {
-          fetch("https://www.austinrockwell.net/api/menus").then(x => {
+          fetch("/api/menus").then(x => {
             x.json().then(x => setMenu(x));
           });
       }, []);

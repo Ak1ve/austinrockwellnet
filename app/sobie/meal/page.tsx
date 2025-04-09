@@ -50,7 +50,7 @@ export default function component() {
     const [endDate, setEndDate] = useState("2023-12-21");
 
     useEffect(() => {
-        fetch("https://www.austinrockwell.net/api/db/calendar").then(x => x.json()).then(x => {
+        fetch("/api/db/calendar").then(x => x.json()).then(x => {
             setStartDate(x.semesterStart);
             setEndDate(x.semesterEnd);
         })

@@ -179,7 +179,8 @@ function DayMenu(props: { name: string, menu: string, mode: string, loading?: fa
     return (
         <>
             <div>{props.name}:<br />
-                <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div> 
+                <span className="italic text-xs">{getHours(props.name, props.mode, props.day)}</span></div>
+            <div className="text-gray-700 dark:text-[#f9f9f9]">{props.menu}</div>
         </>
     );
 }
